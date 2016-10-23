@@ -4,8 +4,15 @@ lazy val commonSettings = Seq(
 	scalaVersion := "2.11.8",
 	scalacOptions += "-deprecation")
 
+lazy val comH2databaseVersion = "1.4.192"
+lazy val h2 = "com.h2database" % "h2" % comH2databaseVersion
+
 lazy val comTypesafeAkkaVersion = "2.4.11"
 lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % comTypesafeAkkaVersion
+lazy val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % comTypesafeAkkaVersion
+
+lazy val orgScalatestVersion = "3.0.0"
+lazy val scalatest = "org.scalatest" %% "scalatest" % orgScalatestVersion
 
 lazy val orgSlf4jVersion = "1.7.10"
 lazy val slf4jSimple = "org.slf4j" % "slf4j-simple" % orgSlf4jVersion
@@ -15,4 +22,7 @@ lazy val timetracker = (project in file(".")).
 	settings(
 		libraryDependencies ++= Seq(
 			akkaActor,
-			slf4jSimple))
+			h2,
+			slf4jSimple,
+			akkaTestkit % "test",
+			scalatest % "test"))
