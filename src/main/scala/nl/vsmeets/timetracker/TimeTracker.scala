@@ -1,5 +1,7 @@
 package nl.vsmeets.timetracker
 
+import akka.actor.ActorSystem
+
 object TimeTracker extends App {
-  println("Starting TimeTracer")
+  val system = ActorSystem("TimeTracker")
 }
