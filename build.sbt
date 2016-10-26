@@ -11,6 +11,9 @@ lazy val comTypesafeAkkaVersion = "2.4.11"
 lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % comTypesafeAkkaVersion
 lazy val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % comTypesafeAkkaVersion
 
+lazy val orgFlywaydbVersion = "4.0.3"
+lazy val flywayCore = "org.flywaydb" % "flyway-core" % orgFlywaydbVersion
+
 lazy val orgScalatestVersion = "3.0.0"
 lazy val scalatest = "org.scalatest" %% "scalatest" % orgScalatestVersion
 
@@ -22,6 +25,7 @@ lazy val timetracker = (project in file(".")).
 	settings(
 		libraryDependencies ++= Seq(
 			akkaActor,
+			flywayCore,
 			h2,
 			slf4jSimple,
 			akkaTestkit % "test",
