@@ -1,0 +1,3 @@
+INSERT INTO "COUNTRY" ("COUNTRY_ID", "CODE") VALUES
+	(1, 'DE'),
+	(2, 'NL');
