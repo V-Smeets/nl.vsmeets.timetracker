@@ -2,8 +2,6 @@ package nl.vsmeets.timetracker.database
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import scala.annotation.implicitNotFound
-
 import org.h2.jdbcx.JdbcDataSource
 
 import com.typesafe.config.ConfigFactory
@@ -22,20 +20,20 @@ object DataSourceActor {
   case class DataSourceResponse(dataSource: JdbcDataSource) extends Outbound
 
   private val counter = new AtomicInteger(0)
-  def createRef(path: String)(implicit context: ActorRefFactory) =
+  def createRef(implicit context: ActorRefFactory) =
     context.actorOf(
-      Props(classOf[DataSourceActor], path),
+      Props(classOf[DataSourceActor]),
       "DataSource-" + counter.incrementAndGet())
 }
 
-private class DataSourceActor(path: String) extends Actor {
+private class DataSourceActor extends Actor {
   import DataSourceActor.DataSourceRequest
   import DataSourceActor.DataSourceResponse
 
   def receive = LoggingReceive {
     case DataSourceRequest =>
       val conf = ConfigFactory.load()
-      val dataSourceConf = conf.getConfig(path)
+      val dataSourceConf = conf.getConfig("database.data-source")
       val ds = new JdbcDataSource()
       ds.setURL(dataSourceConf.getString("url"))
       ds.setUser(dataSourceConf.getString("user"))

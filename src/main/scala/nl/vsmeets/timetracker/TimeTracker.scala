@@ -4,9 +4,7 @@ import akka.actor.Actor
 import akka.actor.ActorSystem
 import akka.actor.Props
 import akka.event.LoggingReceive
-import nl.vsmeets.timetracker.database.DataSourceActor
 import nl.vsmeets.timetracker.database.FlywayActor
-import nl.vsmeets.timetracker.database.FlywayActor.Flyway
 import nl.vsmeets.timetracker.database.FlywayActor.Migrate
 import nl.vsmeets.timetracker.database.FlywayActor.Migrated
 
@@ -21,8 +19,7 @@ object TimeTracker extends App {
   }
   val mainRef = system.actorOf(Props[MainActor], "Main")
 
-  val dataSourceRef = DataSourceActor.createRef("database.data-source")
-  val flywayRef = FlywayActor.createRef(dataSourceRef, new org.flywaydb.core.Flyway with Flyway)
+  val flywayRef = FlywayActor.createRef
   flywayRef.tell(Migrate, mainRef)
 
 }

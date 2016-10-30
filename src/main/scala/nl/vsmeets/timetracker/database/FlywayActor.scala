@@ -2,26 +2,19 @@ package nl.vsmeets.timetracker.database
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import scala.annotation.implicitNotFound
 import scala.concurrent.Future
 import scala.concurrent.Promise
 
+import org.flywaydb.core.Flyway
+
 import akka.actor.Actor
-import akka.actor.ActorRef
 import akka.actor.ActorRefFactory
 import akka.actor.Props
 import akka.actor.actorRef2Scala
 import akka.event.LoggingReceive
 import akka.pattern.pipe
-import javax.sql.DataSource
-import nl.vsmeets.timetracker.database.FlywayActor.Flyway
 
 object FlywayActor {
-  trait Flyway {
-    def setDataSource(dataSource: DataSource): Unit
-    def migrate(): Int
-  }
-
   sealed trait Inbound
   case object Migrate extends Inbound
 
@@ -29,17 +22,18 @@ object FlywayActor {
   case object Migrated extends Outbound
 
   private val counter = new AtomicInteger(0)
-  def createRef(dataSourceRef: ActorRef, flyway: Flyway)(implicit context: ActorRefFactory) =
+  def createRef(implicit context: ActorRefFactory) =
     context.actorOf(
-      Props(classOf[FlywayActor], dataSourceRef, flyway),
+      Props(classOf[FlywayActor]),
       "Flyway-" + counter.incrementAndGet())
-
 }
 
-private class FlywayActor(dataSourceRef: ActorRef, flyway: Flyway) extends Actor {
+private class FlywayActor extends Actor {
   import DataSourceActor.{ DataSourceRequest, DataSourceResponse }
   import FlywayActor.{ Migrate, Migrated, Outbound }
   import context.dispatcher
+
+  val dataSourceRef = DataSourceActor.createRef
 
   def receive = LoggingReceive {
     case Migrate =>
@@ -55,6 +49,7 @@ private class FlywayActor(dataSourceRef: ActorRef, flyway: Flyway) extends Actor
       val currentSender = sender()
       p.future pipeTo currentSender
     case DataSourceResponse(dataSource) =>
+      val flyway = new Flyway()
       flyway.setDataSource(dataSource)
       val f = Future { flyway.migrate() } map { _ => Migrated }
       p completeWith f
