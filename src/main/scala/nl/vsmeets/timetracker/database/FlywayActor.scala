@@ -2,10 +2,12 @@ package nl.vsmeets.timetracker.database
 
 import java.util.concurrent.atomic.AtomicInteger
 
+import scala.annotation.implicitNotFound
 import scala.concurrent.Future
 import scala.concurrent.Promise
 
 import org.flywaydb.core.Flyway
+import org.h2.jdbcx.JdbcDataSource
 
 import akka.actor.Actor
 import akka.actor.ActorRefFactory
@@ -19,7 +21,7 @@ object FlywayActor {
   case object Migrate extends Inbound
 
   sealed trait Outbound
-  case object Migrated extends Outbound
+  case class Migrated(dataSource: JdbcDataSource) extends Outbound
 
   private val counter = new AtomicInteger(0)
   def createRef(implicit context: ActorRefFactory) =
@@ -51,7 +53,7 @@ private class FlywayActor extends Actor {
     case DataSourceResponse(dataSource) =>
       val flyway = new Flyway()
       flyway.setDataSource(dataSource)
-      val f = Future { flyway.migrate() } map { _ => Migrated }
+      val f = Future { flyway.migrate() } map { _ => Migrated(dataSource) }
       p completeWith f
   }
 

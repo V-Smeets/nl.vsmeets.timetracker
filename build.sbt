@@ -10,6 +10,9 @@ lazy val h2 = "com.h2database" % "h2" % comH2databaseVersion
 lazy val comTypesafeAkkaVersion = "2.4.11"
 lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % comTypesafeAkkaVersion
 
+lazy val comTypesafeSlickVersion = "3.1.1"
+lazy val slick = "com.typesafe.slick" %% "slick" % comTypesafeSlickVersion
+
 lazy val orgFlywaydbVersion = "4.0.3"
 lazy val flywayCore = "org.flywaydb" % "flyway-core" % orgFlywaydbVersion
 
@@ -23,4 +26,5 @@ lazy val timetracker = (project in file(".")).
 			akkaActor,
 			flywayCore,
 			h2,
-			slf4jSimple))
+			slf4jSimple,
+			slick))
