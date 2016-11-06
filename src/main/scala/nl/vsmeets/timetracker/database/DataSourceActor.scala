@@ -2,8 +2,6 @@ package nl.vsmeets.timetracker.database
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import scala.annotation.implicitNotFound
-
 import org.h2.jdbcx.JdbcDataSource
 
 import com.typesafe.config.ConfigFactory

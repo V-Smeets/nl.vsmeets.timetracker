@@ -2,7 +2,6 @@ package nl.vsmeets.timetracker.database
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import scala.annotation.implicitNotFound
 import scala.concurrent.Future
 import scala.concurrent.Promise
 
