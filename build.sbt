@@ -2,7 +2,9 @@ lazy val commonSettings = Seq(
 	organization := "nl.vsmeets",
 	version := "0.1",
 	scalaVersion := "2.11.8",
-	scalacOptions += "-deprecation")
+	scalacOptions ++= Seq(
+		"-deprecation",
+		"-feature"))
 
 lazy val comH2databaseVersion = "1.4.192"
 lazy val h2 = "com.h2database" % "h2" % comH2databaseVersion

@@ -1,5 +1,7 @@
 package nl.vsmeets.timetracker.it.database
 
+import scala.language.reflectiveCalls
+
 import com.typesafe.config.ConfigFactory
 
 import akka.actor.actorRef2Scala
@@ -7,12 +9,16 @@ import nl.vsmeets.timetracker.ActorTest
 import nl.vsmeets.timetracker.database.DataSourceActor
 import nl.vsmeets.timetracker.database.DataSourceActor.DataSourceRequest
 import nl.vsmeets.timetracker.database.DataSourceActor.DataSourceResponse
+import nl.vsmeets.timetracker.tags.IntegrationTest
 
+@IntegrationTest
 class DataSourceActorTest extends ActorTest {
 
-  def fixture = new {
+  private class Fixture {
     lazy val dataSourceRef = DataSourceActor.createRef
   }
+
+  private def fixture = new Fixture
 
   "A DataSource actor" should "return the configured data source" in {
     val f = fixture
