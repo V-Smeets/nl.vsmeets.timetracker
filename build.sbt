@@ -19,6 +19,9 @@ lazy val slick = "com.typesafe.slick" %% "slick" % comTypesafeSlickVersion
 lazy val orgFlywaydbVersion = "4.0.3"
 lazy val flywayCore = "org.flywaydb" % "flyway-core" % orgFlywaydbVersion
 
+lazy val orgScalafxVersion = "8.0.92-R10"
+lazy val scalafx = "org.scalafx" %% "scalafx" % orgScalafxVersion
+
 lazy val orgScalatestVersion = "3.0.0"
 lazy val scalatest = "org.scalatest" %% "scalatest" % orgScalatestVersion
 
@@ -32,6 +35,7 @@ lazy val timetracker = (project in file(".")).
 			akkaActor,
 			flywayCore,
 			h2,
+			scalafx,
 			slf4jSimple,
 			slick,
 			akkaTestkit % "test",
