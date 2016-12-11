@@ -22,6 +22,8 @@ object DatabaseActor {
 
 private class DatabaseActor(config: Config) extends Actor {
 
+  val dataSourceRef = DataSourceActor(config)
+
   def receive = LoggingReceive {
     case _ => ()
   }
