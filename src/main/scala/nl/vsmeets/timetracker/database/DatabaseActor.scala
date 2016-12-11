@@ -11,11 +11,12 @@ import akka.event.LoggingReceive
 
 object DatabaseActor {
 
+  val configName = "database"
   private val counter = new AtomicInteger(0)
   def apply(parentConfig: Config)(implicit context: ActorRefFactory) =
     context.actorOf(
-      Props(classOf[DatabaseActor], parentConfig.getConfig("database")),
-      "Database-" + counter.incrementAndGet())
+      Props(classOf[DatabaseActor], parentConfig.getConfig(configName)),
+      configName + "-" + counter.incrementAndGet())
 
 }
 

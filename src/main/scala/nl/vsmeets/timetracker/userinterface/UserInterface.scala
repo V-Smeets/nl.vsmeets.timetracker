@@ -8,9 +8,10 @@ import scalafx.application.JFXApp.PrimaryStage
 
 object UserInterface {
 
+  val configName = "user-interface"
   def apply(parentConfig: Config, logicRef: ActorRef)(implicit context: ActorRefFactory) = new PrimaryStage {
-    val config = parentConfig.getConfig("user-interface")
-    
+    val config = parentConfig.getConfig(configName)
+
     title = config.getString("title")
   }
 

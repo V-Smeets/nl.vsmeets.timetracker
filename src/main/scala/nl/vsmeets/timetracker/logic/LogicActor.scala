@@ -12,11 +12,12 @@ import akka.event.LoggingReceive
 
 object LogicActor {
 
+  val configName = "logic"
   private val counter = new AtomicInteger(0)
   def apply(parentConfig: Config, databaseRef: ActorRef)(implicit context: ActorRefFactory) =
     context.actorOf(
-      Props(classOf[LogicActor], parentConfig.getConfig("logic"), databaseRef),
-      "Logic-" + counter.incrementAndGet())
+      Props(classOf[LogicActor], parentConfig.getConfig(configName), databaseRef),
+      configName + "-" + counter.incrementAndGet())
 
 }
 
