@@ -130,4 +130,7 @@
 		</plugins>
 	</build>
 
+	<modules>
+		<module>backend</module>
+	</modules>
 </project>
