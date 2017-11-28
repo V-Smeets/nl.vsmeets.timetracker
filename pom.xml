@@ -45,10 +45,28 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- project modules -->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>backend.ess.model</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+
+			<!-- Other dependencies -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${org.junit.jupiter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${org.junit.jupiter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.platform</groupId>
+				<artifactId>junit-platform-launcher</artifactId>
+				<version>${org.junit.platform.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
