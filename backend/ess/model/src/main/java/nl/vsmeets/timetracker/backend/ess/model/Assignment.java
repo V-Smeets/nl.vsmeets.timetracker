@@ -6,6 +6,9 @@ package nl.vsmeets.timetracker.backend.ess.model;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * The assignment
  *
@@ -18,13 +21,16 @@ public interface Assignment {
 	 *
 	 * @return The end date.
 	 */
+	@NotNull
 	LocalDate getEndDate();
 
 	/**
 	 * Get the entries that belong to this assignment.
 	 *
-	 * @return The entries. The result can be empty.
+	 * @return The entries.
 	 */
+	@NotNull
+	@Valid
 	Set<? extends Entry> getEntries();
 
 	/**
@@ -32,6 +38,7 @@ public interface Assignment {
 	 *
 	 * @return The start date.
 	 */
+	@NotNull
 	LocalDate getStartDate();
 
 	/**
@@ -39,6 +46,8 @@ public interface Assignment {
 	 *
 	 * @return The task.
 	 */
+	@NotNull
+	@Valid
 	Task getTask();
 
 	/**
@@ -46,6 +55,8 @@ public interface Assignment {
 	 *
 	 * @return The user.
 	 */
+	@NotNull
+	@Valid
 	User getUser();
 
 }

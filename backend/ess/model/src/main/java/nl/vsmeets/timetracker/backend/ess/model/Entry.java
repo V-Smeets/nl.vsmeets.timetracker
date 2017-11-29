@@ -5,6 +5,9 @@ package nl.vsmeets.timetracker.backend.ess.model;
 
 import java.time.Duration;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * An entry for an assigned task or PSP element.
  *
@@ -17,6 +20,8 @@ public interface Entry {
 	 *
 	 * @return The assignment.
 	 */
+	@NotNull
+	@Valid
 	Assignment getAssignment();
 
 	/**
@@ -31,6 +36,8 @@ public interface Entry {
 	 *
 	 * @return The day.
 	 */
+	@NotNull
+	@Valid
 	Day getDay();
 
 	/**

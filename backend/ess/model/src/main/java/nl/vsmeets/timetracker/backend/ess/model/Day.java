@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * A day on which some entries are made.
  *
@@ -20,6 +23,7 @@ public interface Day {
 	 *
 	 * @return The date.
 	 */
+	@NotNull
 	LocalDate getDate();
 
 	/**
@@ -39,8 +43,10 @@ public interface Day {
 	/**
 	 * Get the entries that belong to this day.
 	 *
-	 * @return The entries. The result can be empty.
+	 * @return The entries.
 	 */
+	@NotNull
+	@Valid
 	Set<? extends Entry> getEntries();
 
 	/**
@@ -69,6 +75,8 @@ public interface Day {
 	 *
 	 * @return The user.
 	 */
+	@NotNull
+	@Valid
 	User getUser();
 
 	/**

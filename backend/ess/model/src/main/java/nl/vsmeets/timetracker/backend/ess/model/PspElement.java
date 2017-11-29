@@ -5,6 +5,9 @@ package nl.vsmeets.timetracker.backend.ess.model;
 
 import java.util.Set;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * The PSP element.
  *
@@ -22,22 +25,27 @@ public interface PspElement {
 	/**
 	 * Get the name.
 	 *
-	 * @return The name. (not null)
+	 * @return The name.
 	 */
+	@NotNull
 	String getName();
 
 	/**
 	 * Get the project.
 	 *
-	 * @return The project. (not null)
+	 * @return The project.
 	 */
+	@NotNull
+	@Valid
 	Project getProject();
 
 	/**
 	 * Get the tasks that belong to this PSP element.
 	 *
-	 * @return The tasks. (not null)
+	 * @return The tasks.
 	 */
+	@NotNull
+	@Valid
 	Set<? extends Task> getTasks();
 
 }
