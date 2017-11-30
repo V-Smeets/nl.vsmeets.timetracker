@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,66 +21,65 @@ import org.junit.jupiter.api.Test;
 import nl.vsmeets.timetracker.backend.ess.model.impl.CustomerImpl;
 import nl.vsmeets.timetracker.backend.ess.model.impl.ProjectImpl;
 
-class CustomerImplTest {
+class CustomerImplTest extends AbstractValidationTest {
 
 	@Nested
 	class WithNew {
 
-		private CustomerImpl customer;
-
 		@BeforeEach
-		void createCustomer() {
+		public void createCustomer() {
 			customer = new CustomerImpl(CUSTOMER_NAME_VALID);
 			assertNotNull(customer);
+			validate(customer);
 		}
 
 		@Test
-		void testEqualsObjectEqual() {
+		public void testEqualsObjectEqual() {
 			final CustomerImpl customer2 = new CustomerImpl(CUSTOMER_NAME_VALID);
 			assertTrue(customer.equals(customer2));
 		}
 
 		@Test
 		@SuppressWarnings("unlikely-arg-type")
-		void testEqualsObjectInstance() {
+		public void testEqualsObjectInstance() {
 			assertFalse(customer.equals(0));
 		}
 
 		@Test
-		void testEqualsObjectNotEqual() {
+		public void testEqualsObjectNotEqual() {
 			final CustomerImpl customer2 = new CustomerImpl(CUSTOMER_NAME_VALID + CUSTOMER_NAME_VALID);
 			assertFalse(customer.equals(customer2));
 		}
 
 		@Test
-		void testEqualsObjectNull() {
+		public void testEqualsObjectNull() {
 			assertFalse(customer.equals(null));
 		}
 
 		@Test
-		void testEqualsObjectSame() {
+		public void testEqualsObjectSame() {
 			assertTrue(customer.equals(customer));
 		}
 
 		@Test
-		void testGetName() {
+		public void testGetName() {
 			assertEquals(CUSTOMER_NAME_VALID, customer.getName());
 		}
 
 		@Test
-		void testGetProjects() {
+		public void testGetProjects() {
 			final Set<ProjectImpl> projects = customer.getProjects();
 			assertNotNull(projects);
 			assertEquals(0, projects.size());
 		}
 
 		@Test
-		void testHashCode() {
+		public void testHashCode() {
 			assertNotEquals(0, customer.hashCode());
 		}
 
 		@Test
-		void testToString() {
+		public void testToString() {
 			final String expected = CLASS_UNDER_TEST.getSimpleName();
 			final String string = customer.toString();
 			assertNotNull(string);
@@ -92,14 +93,21 @@ class CustomerImplTest {
 
 	private static final String CUSTOMER_NAME_VALID = "Customer name";
 
+	private CustomerImpl customer;
+
 	@Test
-	void testCustomerImpl() {
-		assertNotNull(new CustomerImpl(CUSTOMER_NAME_VALID));
+	public void testCustomerImpl() {
+		customer = new CustomerImpl(CUSTOMER_NAME_VALID);
+		assertNotNull(customer);
+		validate(customer);
 	}
 
 	@Test
-	void testCustomerImplNullName() {
-		assertThrows(NullPointerException.class, () -> new CustomerImpl(null));
+	public void testCustomerImplNullName() {
+		assertThrows(ConstraintViolationException.class, () -> {
+			customer = new CustomerImpl(null);
+			validate(customer);
+		});
 	}
 
 }

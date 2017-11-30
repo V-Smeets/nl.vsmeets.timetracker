@@ -4,8 +4,10 @@
 package nl.vsmeets.timetracker.backend.ess.model.impl;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import nl.vsmeets.timetracker.backend.ess.model.Customer;
 
@@ -19,11 +21,14 @@ public class CustomerImpl implements Customer {
 	/**
 	 * The name of the customer.
 	 */
+	@NotNull
 	private final String name;
 
 	/**
 	 * The projects of this customer.
 	 */
+	@NotNull
+	@Valid
 	private final Set<ProjectImpl> projects = new HashSet<>();
 
 	/**
@@ -32,9 +37,9 @@ public class CustomerImpl implements Customer {
 	 * @param name
 	 *            The name of the customer.
 	 */
-	public CustomerImpl(final String name) {
+	public CustomerImpl(@NotNull final String name) {
 		super();
-		this.name = Objects.requireNonNull(name, "name");
+		this.name = name;
 	}
 
 	@Override

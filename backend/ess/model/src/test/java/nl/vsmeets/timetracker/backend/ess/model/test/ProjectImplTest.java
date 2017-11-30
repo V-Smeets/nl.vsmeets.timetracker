@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,56 +21,55 @@ import nl.vsmeets.timetracker.backend.ess.model.impl.CustomerImpl;
 import nl.vsmeets.timetracker.backend.ess.model.impl.ProjectImpl;
 import nl.vsmeets.timetracker.backend.ess.model.impl.PspElementImpl;
 
-class ProjectImplTest {
+class ProjectImplTest extends AbstractValidationTest {
 
 	@Nested
 	class WithNew {
 
-		private ProjectImpl project;
-
 		@BeforeEach
-		void createProject() {
+		public void createProject() {
 			project = new ProjectImpl(customer, PROJECT_NAME_VALID);
 			assertNotNull(project);
+			validate(project);
 		}
 
 		@Test
-		void testEqualsObjectEqual() {
+		public void testEqualsObjectEqual() {
 			final ProjectImpl project2 = new ProjectImpl(customer, PROJECT_NAME_VALID);
 			assertTrue(project.equals(project2));
 		}
 
 		@Test
 		@SuppressWarnings("unlikely-arg-type")
-		void testEqualsObjectInstance() {
+		public void testEqualsObjectInstance() {
 			assertFalse(project.equals(0));
 		}
 
 		@Test
-		void testEqualsObjectNull() {
+		public void testEqualsObjectNull() {
 			assertFalse(project.equals(null));
 		}
 
 		@Test
-		void testEqualsObjectOtherCustomer() {
+		public void testEqualsObjectOtherCustomer() {
 			final CustomerImpl customer2 = new CustomerImpl(CUSTOMER_NAME_VALID + CUSTOMER_NAME_VALID);
 			final ProjectImpl project2 = new ProjectImpl(customer2, PROJECT_NAME_VALID);
 			assertFalse(project.equals(project2));
 		}
 
 		@Test
-		void testEqualsObjectOtherName() {
+		public void testEqualsObjectOtherName() {
 			final ProjectImpl project2 = new ProjectImpl(customer, PROJECT_NAME_VALID + PROJECT_NAME_VALID);
 			assertFalse(project.equals(project2));
 		}
 
 		@Test
-		void testEqualsObjectSame() {
+		public void testEqualsObjectSame() {
 			assertTrue(project.equals(project));
 		}
 
 		@Test
-		void testGetCustomer() {
+		public void testGetCustomer() {
 			final Customer actualCustomer = project.getCustomer();
 			assertSame(customer, actualCustomer);
 			assertEquals(1, actualCustomer.getProjects().size());
@@ -76,24 +77,24 @@ class ProjectImplTest {
 		}
 
 		@Test
-		void testGetName() {
+		public void testGetName() {
 			assertEquals(PROJECT_NAME_VALID, project.getName());
 		}
 
 		@Test
-		void testGetProjects() {
+		public void testGetProjects() {
 			final Set<PspElementImpl> pspElements = project.getPspElements();
 			assertNotNull(pspElements);
 			assertEquals(0, pspElements.size());
 		}
 
 		@Test
-		void testHashCode() {
+		public void testHashCode() {
 			assertNotEquals(0, project.hashCode());
 		}
 
 		@Test
-		void testToString() {
+		public void testToString() {
 			final String expected = CLASS_UNDER_TEST.getSimpleName();
 			final String string = project.toString();
 			assertNotNull(string);
@@ -108,26 +109,39 @@ class ProjectImplTest {
 	private static final String CUSTOMER_NAME_VALID = "Customer name";
 	private static final String PROJECT_NAME_VALID = "Project name";
 
-	private final CustomerImpl customer = new CustomerImpl(CUSTOMER_NAME_VALID);
+	private CustomerImpl customer;
+	private ProjectImpl project;
 
-	@Test
-	void testProjectImpl() {
-		assertNotNull(new ProjectImpl(customer, PROJECT_NAME_VALID));
+	@BeforeEach
+	public void createCustomer() {
+		customer = new CustomerImpl(CUSTOMER_NAME_VALID);
+		assertNotNull(customer);
+		validate(customer);
 	}
 
 	@Test
-	void testProjectImplNullCustomer() {
-		assertThrows(NullPointerException.class, () -> new ProjectImpl(null, PROJECT_NAME_VALID));
+	public void testProjectImpl() {
+		project = new ProjectImpl(customer, PROJECT_NAME_VALID);
+		assertNotNull(project);
+		validate(project);
 	}
 
 	@Test
-	void testProjectImplNullCustomerNullName() {
-		assertThrows(NullPointerException.class, () -> new ProjectImpl(null, null));
+	public void testProjectImplNullCustomer() {
+		assertThrows(NullPointerException.class, () -> {
+			project = new ProjectImpl(null, PROJECT_NAME_VALID);
+			assertNotNull(project);
+			validate(project);
+		});
 	}
 
 	@Test
-	void testProjectImplNullName() {
-		assertThrows(NullPointerException.class, () -> new ProjectImpl(customer, null));
+	public void testProjectImplNullName() {
+		assertThrows(ConstraintViolationException.class, () -> {
+			project = new ProjectImpl(customer, null);
+			assertNotNull(project);
+			validate(project);
+		});
 	}
 
 }
