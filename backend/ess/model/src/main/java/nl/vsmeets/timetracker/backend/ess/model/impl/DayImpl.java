@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import nl.vsmeets.timetracker.backend.ess.model.Day;
 import nl.vsmeets.timetracker.backend.ess.model.User;
 
@@ -23,11 +26,14 @@ public class DayImpl implements Day {
 	/**
 	 * The user.
 	 */
-	private final UserImpl user;
+	@NotNull
+	@Valid
+	private final User user;
 
 	/**
 	 * The date.
 	 */
+	@NotNull
 	private final LocalDate date;
 
 	/**
@@ -58,6 +64,8 @@ public class DayImpl implements Day {
 	/**
 	 * The entries.
 	 */
+	@NotNull
+	@Valid
 	private final Set<EntryImpl> entries = new HashSet<>();
 
 	/**
@@ -68,11 +76,43 @@ public class DayImpl implements Day {
 	 * @param date
 	 *            The date.
 	 */
-	public DayImpl(final UserImpl user, final LocalDate date) {
+	public DayImpl(@NotNull @Valid final User user, @NotNull final LocalDate date) {
 		super();
-		this.user = Objects.requireNonNull(user, "user");
-		this.user.getDays().add(this);
-		this.date = Objects.requireNonNull(date, "date");
+		this.user = user;
+		this.date = date;
+		if (this.user instanceof UserImpl) {
+			final UserImpl userImpl = (UserImpl) this.user;
+			userImpl.getDays().add(this);
+		}
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof DayImpl)) {
+			return false;
+		}
+		final DayImpl other = (DayImpl) obj;
+		if (date == null) {
+			if (other.date != null) {
+				return false;
+			}
+		} else if (!date.equals(other.date)) {
+			return false;
+		}
+		if (user == null) {
+			if (other.user != null) {
+				return false;
+			}
+		} else if (!user.equals(other.user)) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -116,6 +156,15 @@ public class DayImpl implements Day {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (date == null ? 0 : date.hashCode());
+		result = prime * result + (user == null ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
 	public void setEndTime1(final LocalTime endTime1) {
 		this.endTime1 = endTime1;
 	}
@@ -139,8 +188,16 @@ public class DayImpl implements Day {
 	public void setTravelDuration(final Duration travelDuration) {
 		this.travelDuration = travelDuration;
 		if (travelDuration != null) {
+			// TODO Use validation to check the range.
 			checkRange(travelDuration, Duration.ZERO, Duration.ofHours(24), "travelDuration");
 		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"DayImpl [date=%s, startTime1=%s, endTime1=%s, startTime2=%s, endTime2=%s, travelDuration=%s]", date,
+				startTime1, endTime1, startTime2, endTime2, travelDuration);
 	}
 
 	/**

@@ -24,7 +24,7 @@ public class ProjectImpl implements Project {
 	 */
 	@NotNull
 	@Valid
-	private final CustomerImpl customer;
+	private final Customer customer;
 
 	/**
 	 * The name.
@@ -47,11 +47,14 @@ public class ProjectImpl implements Project {
 	 * @param name
 	 *            The name.
 	 */
-	public ProjectImpl(@NotNull @Valid final CustomerImpl customer, @NotNull final String name) {
+	public ProjectImpl(@NotNull @Valid final Customer customer, @NotNull final String name) {
 		super();
 		this.customer = customer;
 		this.name = name;
-		this.customer.getProjects().add(this);
+		if (this.customer instanceof CustomerImpl) {
+			final CustomerImpl customerImpl = (CustomerImpl) this.customer;
+			customerImpl.getProjects().add(this);
+		}
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,28 +16,24 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import nl.vsmeets.timetracker.backend.ess.model.Project;
-import nl.vsmeets.timetracker.backend.ess.model.impl.CustomerImpl;
-import nl.vsmeets.timetracker.backend.ess.model.impl.ProjectImpl;
 import nl.vsmeets.timetracker.backend.ess.model.impl.PspElementImpl;
 import nl.vsmeets.timetracker.backend.ess.model.impl.TaskImpl;
 
-public class PspElementImplTest extends AbstractValidationTest {
+public class PspElementImplTest extends AbstractValidationTest implements PspElementConstants {
 
 	@Nested
 	class WithNew {
 
 		@BeforeEach
 		public void createPspElement() {
-			pspElement = new PspElementImpl(project, PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
+			pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
 			assertNotNull(pspElement);
 			validate(pspElement);
 		}
 
 		@Test
 		public void testEqualsObjectEqual() {
-			final PspElementImpl pspElement2 =
-					new PspElementImpl(project, PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
-			assertTrue(pspElement.equals(pspElement2));
+			assertTrue(pspElement.equals(getPspElement()));
 		}
 
 		@Test
@@ -54,17 +49,12 @@ public class PspElementImplTest extends AbstractValidationTest {
 
 		@Test
 		public void testEqualsObjectOtherName() {
-			final PspElementImpl pspElement2 = new PspElementImpl(project,
-					PSP_ELEMENT_NAME_VALID + PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
-			assertFalse(pspElement.equals(pspElement2));
+			assertFalse(pspElement.equals(getPspElementOtherName()));
 		}
 
 		@Test
 		public void testEqualsObjectOtherProject() {
-			final PspElementImpl pspElement2 = new PspElementImpl(
-					new ProjectImpl(new CustomerImpl(CUSTOMER_NAME_VALID), PROJECT_NAME_VALID + PROJECT_NAME_VALID),
-					PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
-			assertFalse(pspElement.equals(pspElement2));
+			assertFalse(pspElement.equals(getPspElementOtherProject()));
 		}
 
 		@Test
@@ -85,13 +75,13 @@ public class PspElementImplTest extends AbstractValidationTest {
 		@Test
 		public void testGetProject() {
 			final Project actualProject = pspElement.getProject();
-			assertSame(project, actualProject);
+			assertEquals(getProject(), actualProject);
 			assertEquals(1, actualProject.getPspElements().size());
 			assertTrue(actualProject.getPspElements().contains(pspElement));
 		}
 
 		@Test
-		public void testGetProjects() {
+		public void testGetTasks() {
 			final Set<TaskImpl> tasks = pspElement.getTasks();
 			assertNotNull(tasks);
 			assertEquals(0, tasks.size());
@@ -113,33 +103,18 @@ public class PspElementImplTest extends AbstractValidationTest {
 
 	}
 
-	private static final Class<PspElementImpl> CLASS_UNDER_TEST = PspElementImpl.class;
-
-	private static final String CUSTOMER_NAME_VALID = "Customer name";
-	private static final String PROJECT_NAME_VALID = "Project name";
-	private static final String PSP_ELEMENT_NAME_VALID = "PSP Element name";
-	private static final String PSP_ELEMENT_DESCRIPTION_VALID = "PSP Element description";
-
-	private ProjectImpl project;
 	private PspElementImpl pspElement;
-
-	@BeforeEach
-	public void createProject() {
-		project = new ProjectImpl(new CustomerImpl(CUSTOMER_NAME_VALID), PROJECT_NAME_VALID);
-		assertNotNull(project);
-		validate(project);
-	}
 
 	@Test
 	public void testPspElementImpl() {
-		pspElement = new PspElementImpl(project, PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
+		pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
 		assertNotNull(pspElement);
 		validate(pspElement);
 	}
 
 	@Test
 	public void testPspElementImplNullDescription() {
-		pspElement = new PspElementImpl(project, PSP_ELEMENT_NAME_VALID, null);
+		pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, null);
 		assertNotNull(pspElement);
 		validate(pspElement);
 	}
@@ -147,7 +122,7 @@ public class PspElementImplTest extends AbstractValidationTest {
 	@Test
 	public void testPspElementImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			pspElement = new PspElementImpl(project, null, PSP_ELEMENT_DESCRIPTION_VALID);
+			pspElement = new PspElementImpl(getProject(), null, PSP_ELEMENT_DESCRIPTION_VALID);
 			assertNotNull(pspElement);
 			validate(pspElement);
 		});
@@ -155,7 +130,7 @@ public class PspElementImplTest extends AbstractValidationTest {
 
 	@Test
 	public void testPspElementImplNullProject() {
-		assertThrows(NullPointerException.class, () -> {
+		assertThrows(ConstraintViolationException.class, () -> {
 			pspElement = new PspElementImpl(null, PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
 			assertNotNull(pspElement);
 			validate(pspElement);

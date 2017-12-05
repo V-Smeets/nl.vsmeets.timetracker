@@ -24,7 +24,7 @@ public class PspElementImpl implements PspElement {
 	 */
 	@NotNull
 	@Valid
-	private final ProjectImpl project;
+	private final Project project;
 
 	/**
 	 * The name.
@@ -54,13 +54,15 @@ public class PspElementImpl implements PspElement {
 	 * @param description
 	 *            The description.
 	 */
-	public PspElementImpl(@NotNull @Valid final ProjectImpl project, @NotNull final String name,
-			final String description) {
+	public PspElementImpl(@NotNull @Valid final Project project, @NotNull final String name, final String description) {
 		super();
 		this.project = project;
 		this.name = name;
 		this.description = description;
-		this.project.getPspElements().add(this);
+		if (this.project instanceof ProjectImpl) {
+			final ProjectImpl projectImpl = (ProjectImpl) this.project;
+			projectImpl.getPspElements().add(this);
+		}
 	}
 
 	@Override

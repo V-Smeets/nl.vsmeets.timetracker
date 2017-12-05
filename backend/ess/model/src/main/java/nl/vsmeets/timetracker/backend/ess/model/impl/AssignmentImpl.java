@@ -5,8 +5,10 @@ package nl.vsmeets.timetracker.backend.ess.model.impl;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import nl.vsmeets.timetracker.backend.ess.model.Assignment;
 import nl.vsmeets.timetracker.backend.ess.model.Task;
@@ -22,26 +24,34 @@ public class AssignmentImpl implements Assignment {
 	/**
 	 * The user.
 	 */
-	private final UserImpl user;
+	@NotNull
+	@Valid
+	private final User user;
 
 	/**
 	 * The task.
 	 */
-	private final TaskImpl task;
+	@NotNull
+	@Valid
+	private final Task task;
 
 	/**
 	 * The start date.
 	 */
+	@NotNull
 	private final LocalDate startDate;
 
 	/**
 	 * The end date.
 	 */
+	@NotNull
 	private final LocalDate endDate;
 
 	/**
 	 * The entries.
 	 */
+	@NotNull
+	@Valid
 	private final Set<EntryImpl> entries = new HashSet<>();
 
 	/**
@@ -56,15 +66,21 @@ public class AssignmentImpl implements Assignment {
 	 * @param endDate
 	 *            The end date.
 	 */
-	public AssignmentImpl(final UserImpl user, final TaskImpl task, final LocalDate startDate,
-			final LocalDate endDate) {
+	public AssignmentImpl(@NotNull @Valid final User user, @NotNull @Valid final Task task,
+			@NotNull final LocalDate startDate, @NotNull final LocalDate endDate) {
 		super();
-		this.user = Objects.requireNonNull(user, "user");
-		this.user.getAssignments().add(this);
-		this.task = Objects.requireNonNull(task, "task");
-		this.task.getAssignments().add(this);
-		this.startDate = Objects.requireNonNull(startDate, "startDate");
-		this.endDate = Objects.requireNonNull(endDate, "endDate");
+		this.user = user;
+		this.task = task;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		if (this.user instanceof UserImpl) {
+			final UserImpl userImpl = (UserImpl) this.user;
+			userImpl.getAssignments().add(this);
+		}
+		if (this.task instanceof TaskImpl) {
+			final TaskImpl taskImpl = (TaskImpl) this.task;
+			taskImpl.getAssignments().add(this);
+		}
 		if (startDate.isAfter(endDate)) {
 			throw new IllegalArgumentException("startDate > endDate");
 		}

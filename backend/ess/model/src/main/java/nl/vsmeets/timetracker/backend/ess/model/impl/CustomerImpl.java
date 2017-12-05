@@ -18,6 +18,8 @@ import nl.vsmeets.timetracker.backend.ess.model.Customer;
  */
 public class CustomerImpl implements Customer {
 
+	// TODO Make all classes immutable.
+
 	/**
 	 * The name of the customer.
 	 */

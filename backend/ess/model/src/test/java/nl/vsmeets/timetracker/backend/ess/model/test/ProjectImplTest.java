@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,26 +16,24 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import nl.vsmeets.timetracker.backend.ess.model.Customer;
-import nl.vsmeets.timetracker.backend.ess.model.impl.CustomerImpl;
 import nl.vsmeets.timetracker.backend.ess.model.impl.ProjectImpl;
 import nl.vsmeets.timetracker.backend.ess.model.impl.PspElementImpl;
 
-class ProjectImplTest extends AbstractValidationTest {
+class ProjectImplTest extends AbstractValidationTest implements ProjectConstants {
 
 	@Nested
 	class WithNew {
 
 		@BeforeEach
 		public void createProject() {
-			project = new ProjectImpl(customer, PROJECT_NAME_VALID);
+			project = new ProjectImpl(getCustomer(), PROJECT_NAME_VALID);
 			assertNotNull(project);
 			validate(project);
 		}
 
 		@Test
 		public void testEqualsObjectEqual() {
-			final ProjectImpl project2 = new ProjectImpl(customer, PROJECT_NAME_VALID);
-			assertTrue(project.equals(project2));
+			assertTrue(project.equals(getProject()));
 		}
 
 		@Test
@@ -52,15 +49,12 @@ class ProjectImplTest extends AbstractValidationTest {
 
 		@Test
 		public void testEqualsObjectOtherCustomer() {
-			final CustomerImpl customer2 = new CustomerImpl(CUSTOMER_NAME_VALID + CUSTOMER_NAME_VALID);
-			final ProjectImpl project2 = new ProjectImpl(customer2, PROJECT_NAME_VALID);
-			assertFalse(project.equals(project2));
+			assertFalse(project.equals(getProjectOtherCustomer()));
 		}
 
 		@Test
 		public void testEqualsObjectOtherName() {
-			final ProjectImpl project2 = new ProjectImpl(customer, PROJECT_NAME_VALID + PROJECT_NAME_VALID);
-			assertFalse(project.equals(project2));
+			assertFalse(project.equals(getProjectOtherName()));
 		}
 
 		@Test
@@ -71,7 +65,7 @@ class ProjectImplTest extends AbstractValidationTest {
 		@Test
 		public void testGetCustomer() {
 			final Customer actualCustomer = project.getCustomer();
-			assertSame(customer, actualCustomer);
+			assertEquals(getCustomer(), actualCustomer);
 			assertEquals(1, actualCustomer.getProjects().size());
 			assertTrue(actualCustomer.getProjects().contains(project));
 		}
@@ -104,31 +98,18 @@ class ProjectImplTest extends AbstractValidationTest {
 
 	}
 
-	private static final Class<ProjectImpl> CLASS_UNDER_TEST = ProjectImpl.class;
-
-	private static final String CUSTOMER_NAME_VALID = "Customer name";
-	private static final String PROJECT_NAME_VALID = "Project name";
-
-	private CustomerImpl customer;
 	private ProjectImpl project;
-
-	@BeforeEach
-	public void createCustomer() {
-		customer = new CustomerImpl(CUSTOMER_NAME_VALID);
-		assertNotNull(customer);
-		validate(customer);
-	}
 
 	@Test
 	public void testProjectImpl() {
-		project = new ProjectImpl(customer, PROJECT_NAME_VALID);
+		project = new ProjectImpl(getCustomer(), PROJECT_NAME_VALID);
 		assertNotNull(project);
 		validate(project);
 	}
 
 	@Test
 	public void testProjectImplNullCustomer() {
-		assertThrows(NullPointerException.class, () -> {
+		assertThrows(ConstraintViolationException.class, () -> {
 			project = new ProjectImpl(null, PROJECT_NAME_VALID);
 			assertNotNull(project);
 			validate(project);
@@ -138,7 +119,7 @@ class ProjectImplTest extends AbstractValidationTest {
 	@Test
 	public void testProjectImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			project = new ProjectImpl(customer, null);
+			project = new ProjectImpl(getCustomer(), null);
 			assertNotNull(project);
 			validate(project);
 		});

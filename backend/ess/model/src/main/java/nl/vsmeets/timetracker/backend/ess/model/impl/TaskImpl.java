@@ -24,7 +24,7 @@ public class TaskImpl implements Task {
 	 */
 	@NotNull
 	@Valid
-	private final PspElementImpl pspElement;
+	private final PspElement pspElement;
 
 	/**
 	 * The name.
@@ -54,13 +54,15 @@ public class TaskImpl implements Task {
 	 * @param description
 	 *            The description.
 	 */
-	public TaskImpl(@NotNull @Valid final PspElementImpl pspElement, @NotNull final String name,
-			final String description) {
+	public TaskImpl(@NotNull @Valid final PspElement pspElement, @NotNull final String name, final String description) {
 		super();
 		this.pspElement = pspElement;
 		this.name = name;
 		this.description = description;
-		this.pspElement.getTasks().add(this);
+		if (this.pspElement instanceof PspElementImpl) {
+			final PspElementImpl pspElementImpl = (PspElementImpl) this.pspElement;
+			pspElementImpl.getTasks().add(this);
+		}
 	}
 
 	@Override

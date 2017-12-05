@@ -15,68 +15,76 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import nl.vsmeets.timetracker.backend.ess.model.impl.CustomerImpl;
-import nl.vsmeets.timetracker.backend.ess.model.impl.ProjectImpl;
+import nl.vsmeets.timetracker.backend.ess.model.impl.AssignmentImpl;
+import nl.vsmeets.timetracker.backend.ess.model.impl.DayImpl;
+import nl.vsmeets.timetracker.backend.ess.model.impl.UserImpl;
 
-class CustomerImplTest extends AbstractValidationTest implements CustomerConstants {
+public class UserImplTest extends AbstractValidationTest implements UserConstants {
 
 	@Nested
 	class WithNew {
 
 		@BeforeEach
-		public void createCustomer() {
-			customer = new CustomerImpl(CUSTOMER_NAME_VALID);
-			assertNotNull(customer);
-			validate(customer);
+		public void createUser() {
+			user = new UserImpl(USER_NAME_VALID);
+			assertNotNull(user);
+			validate(user);
 		}
 
 		@Test
 		public void testEqualsObjectEqual() {
-			assertTrue(customer.equals(getCustomer()));
+			assertTrue(user.equals(getUser()));
 		}
 
 		@Test
 		@SuppressWarnings("unlikely-arg-type")
 		public void testEqualsObjectInstance() {
-			assertFalse(customer.equals(0));
+			assertFalse(user.equals(0));
 		}
 
 		@Test
 		public void testEqualsObjectNotEqual() {
-			assertFalse(customer.equals(getCustomerOtherName()));
+			assertFalse(user.equals(getUserOtherName()));
 		}
 
 		@Test
 		public void testEqualsObjectNull() {
-			assertFalse(customer.equals(null));
+			assertFalse(user.equals(null));
 		}
 
 		@Test
 		public void testEqualsObjectSame() {
-			assertTrue(customer.equals(customer));
+			assertTrue(user.equals(user));
+		}
+
+		@Test
+		public void testGetAssignments() {
+			final Set<AssignmentImpl> assignments = user.getAssignments();
+			assertNotNull(assignments);
+			assertEquals(0, assignments.size());
+		}
+
+		@Test
+		public void testGetDays() {
+			final Set<DayImpl> days = user.getDays();
+			assertNotNull(days);
+			assertEquals(0, days.size());
 		}
 
 		@Test
 		public void testGetName() {
-			assertEquals(CUSTOMER_NAME_VALID, customer.getName());
-		}
-
-		@Test
-		public void testGetProjects() {
-			final Set<ProjectImpl> projects = customer.getProjects();
-			assertNotNull(projects);
-			assertEquals(0, projects.size());
+			assertEquals(USER_NAME_VALID, user.getName());
 		}
 
 		@Test
 		public void testHashCode() {
-			assertNotEquals(0, customer.hashCode());
+			assertNotEquals(0, user.hashCode());
 		}
 
 		@Test
 		public void testToString() {
 			final String expected = CLASS_UNDER_TEST.getSimpleName();
-			final String string = customer.toString();
+			final String string = user.toString();
 			assertNotNull(string);
 			assertTrue(string.length() >= expected.length());
 			assertEquals(expected, string.substring(0, expected.length()));
@@ -84,20 +92,20 @@ class CustomerImplTest extends AbstractValidationTest implements CustomerConstan
 
 	}
 
-	private CustomerImpl customer;
+	private UserImpl user;
 
 	@Test
-	public void testCustomerImpl() {
-		customer = new CustomerImpl(CUSTOMER_NAME_VALID);
-		assertNotNull(customer);
-		validate(customer);
+	public void testUserImpl() {
+		user = new UserImpl(USER_NAME_VALID);
+		assertNotNull(user);
+		validate(user);
 	}
 
 	@Test
-	public void testCustomerImplNullName() {
+	public void testUserImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			customer = new CustomerImpl(null);
-			validate(customer);
+			user = new UserImpl(null);
+			validate(user);
 		});
 	}
 
