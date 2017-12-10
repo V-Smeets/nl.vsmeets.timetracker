@@ -13,12 +13,14 @@ import javax.validation.constraints.NotNull;
 import nl.vsmeets.timetracker.backend.ess.model.Assignment;
 import nl.vsmeets.timetracker.backend.ess.model.Task;
 import nl.vsmeets.timetracker.backend.ess.model.User;
+import nl.vsmeets.timetracker.backend.ess.model.impl.validation.ValidAssignment;
 
 /**
  * The assignment.
  *
  * @author s230984
  */
+@ValidAssignment
 public class AssignmentImpl implements Assignment {
 
 	/**
@@ -80,9 +82,6 @@ public class AssignmentImpl implements Assignment {
 		if (this.task instanceof TaskImpl) {
 			final TaskImpl taskImpl = (TaskImpl) this.task;
 			taskImpl.getAssignments().add(this);
-		}
-		if (startDate.isAfter(endDate)) {
-			throw new IllegalArgumentException("startDate > endDate");
 		}
 	}
 

@@ -123,7 +123,7 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 
 	@Test
 	public void testAssignmentImplDateOrder() {
-		assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(ConstraintViolationException.class, () -> {
 			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_END_DATE, ASSIGNMENT_START_DATE);
 			assertNotNull(assignment);
 			validate(assignment);
@@ -132,7 +132,7 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 
 	@Test
 	public void testAssignmentImplNullEndDate() {
-		assertThrows(NullPointerException.class, () -> {
+		assertThrows(ConstraintViolationException.class, () -> {
 			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_START_DATE, null);
 			assertNotNull(assignment);
 			validate(assignment);
@@ -141,8 +141,17 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 
 	@Test
 	public void testAssignmentImplNullStartDate() {
-		assertThrows(NullPointerException.class, () -> {
+		assertThrows(ConstraintViolationException.class, () -> {
 			assignment = new AssignmentImpl(getUser(), getTask(), null, ASSIGNMENT_END_DATE);
+			assertNotNull(assignment);
+			validate(assignment);
+		});
+	}
+
+	@Test
+	public void testAssignmentImplNullStartDateNullEndDate() {
+		assertThrows(ConstraintViolationException.class, () -> {
+			assignment = new AssignmentImpl(getUser(), getTask(), null, null);
 			assertNotNull(assignment);
 			validate(assignment);
 		});
