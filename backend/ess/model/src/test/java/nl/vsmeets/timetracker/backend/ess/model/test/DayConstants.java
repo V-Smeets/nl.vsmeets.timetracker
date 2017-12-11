@@ -12,14 +12,14 @@ public interface DayConstants extends UserConstants {
 	Class<DayImpl> CLASS_UNDER_TEST = DayImpl.class;
 
 	LocalDate DAY_DATE_VALID = LocalDate.now();
-	LocalDate DAY_OTHER_DATE_VALID = DAY_DATE_VALID.plusDays(2);
+	LocalDate DAY_OTHER_DATE_VALID = DAY_DATE_VALID.plusDays(2L);
 	LocalTime DAY_START_TIME_1_VALID = LocalTime.now();
-	LocalTime DAY_END_TIME_1_VALID = DAY_START_TIME_1_VALID.plusHours(4);
-	LocalTime DAY_START_TIME_2_VALID = DAY_END_TIME_1_VALID.plusHours(1);
-	LocalTime DAY_END_TIME_2_VALID = DAY_START_TIME_2_VALID.plusHours(4);
-	Duration DAY_TRAVEL_DURATION_VALID = Duration.ofHours(2);
-	Duration DAY_TRAVEL_DURATION_MINIMUM = Duration.ofHours(-2);
-	Duration DAY_TRAVEL_DURATION_MAXIMUM = Duration.ofDays(2);
+	LocalTime DAY_END_TIME_1_VALID = DAY_START_TIME_1_VALID.plusHours(4L);
+	LocalTime DAY_START_TIME_2_VALID = DAY_END_TIME_1_VALID.plusHours(1L);
+	LocalTime DAY_END_TIME_2_VALID = DAY_START_TIME_2_VALID.plusHours(4L);
+	Duration DAY_TRAVEL_DURATION_VALID = Duration.ofHours(2L);
+	Duration DAY_TRAVEL_DURATION_VALID_MINIMUM = Duration.ZERO;
+	Duration DAY_TRAVEL_DURATION_VALID_MAXIMUM = Duration.ofDays(1L).minusNanos(1L);
 
 	default Day getDay() {
 		return new DayImpl(getUser(), DAY_DATE_VALID);

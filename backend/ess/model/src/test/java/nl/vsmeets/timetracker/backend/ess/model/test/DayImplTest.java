@@ -134,17 +134,17 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 		}
 
 		@Test
-		public void testSetTravelDurationMaximum() {
-			assertThrows(IllegalArgumentException.class, () -> {
-				day.setTravelDuration(DAY_TRAVEL_DURATION_MAXIMUM);
+		public void testSetTravelDurationInvalidMaximum() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MAXIMUM.plusNanos(1L));
 				validate(day);
 			});
 		}
 
 		@Test
-		public void testSetTravelDurationMinimum() {
-			assertThrows(IllegalArgumentException.class, () -> {
-				day.setTravelDuration(DAY_TRAVEL_DURATION_MINIMUM);
+		public void testSetTravelDurationInvalidMinimum() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MINIMUM.minusNanos(1L));
 				validate(day);
 			});
 		}
@@ -153,6 +153,18 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 		public void testSetTravelDurationNull() {
 			day.setTravelDuration(null);
 			assertNull(day.getTravelDuration());
+		}
+
+		@Test
+		public void testSetTravelDurationValidMaximum() {
+			day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MAXIMUM);
+			assertEquals(DAY_TRAVEL_DURATION_VALID_MAXIMUM, day.getTravelDuration());
+		}
+
+		@Test
+		public void testSetTravelDurationValidMinimum() {
+			day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MINIMUM);
+			assertEquals(DAY_TRAVEL_DURATION_VALID_MINIMUM, day.getTravelDuration());
 		}
 
 		@Test

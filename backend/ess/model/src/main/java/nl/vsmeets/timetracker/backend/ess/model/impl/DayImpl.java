@@ -7,11 +7,13 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
 
 import nl.vsmeets.timetracker.backend.ess.model.Day;
 import nl.vsmeets.timetracker.backend.ess.model.User;
@@ -59,6 +61,8 @@ public class DayImpl implements Day {
 	/**
 	 * The travel duration.
 	 */
+	@DurationMin
+	@DurationMax(days = 1, inclusive = false)
 	private Duration travelDuration;
 
 	/**
@@ -187,10 +191,6 @@ public class DayImpl implements Day {
 	@Override
 	public void setTravelDuration(final Duration travelDuration) {
 		this.travelDuration = travelDuration;
-		if (travelDuration != null) {
-			// TODO Use validation to check the range.
-			checkRange(travelDuration, Duration.ZERO, Duration.ofHours(24), "travelDuration");
-		}
 	}
 
 	@Override
@@ -198,31 +198,6 @@ public class DayImpl implements Day {
 		return String.format(
 				"DayImpl [date=%s, startTime1=%s, endTime1=%s, startTime2=%s, endTime2=%s, travelDuration=%s]", date,
 				startTime1, endTime1, startTime2, endTime2, travelDuration);
-	}
-
-	/**
-	 * Check that the value is in the range between minimumAllowed and
-	 * maximumAllowed inclusive.
-	 *
-	 * @param value
-	 *            The value to check. (not null)
-	 * @param minimumAllowed
-	 *            The minimum allowed value. (not null)
-	 * @param maximumAllowed
-	 *            The maximum allowed value. (not null)
-	 * @param name
-	 *            The name of the value.
-	 */
-	private <T> void checkRange(final Comparable<T> value, final T minimumAllowed, final T maximumAllowed,
-			final String name) {
-		Objects.requireNonNull(value, "value");
-		Objects.requireNonNull(minimumAllowed, "minimumAllowed");
-		Objects.requireNonNull(maximumAllowed, "maximumAllowed");
-		if (value.compareTo(minimumAllowed) < 0) {
-			throw new IllegalArgumentException(String.format("%s < %s", name, minimumAllowed));
-		} else if (value.compareTo(maximumAllowed) > 0) {
-			throw new IllegalArgumentException(String.format("%s > %s", name, maximumAllowed));
-		}
 	}
 
 }
