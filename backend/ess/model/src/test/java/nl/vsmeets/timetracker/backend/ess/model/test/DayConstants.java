@@ -13,7 +13,7 @@ public interface DayConstants extends UserConstants {
 
 	LocalDate DAY_DATE_VALID = LocalDate.now();
 	LocalDate DAY_OTHER_DATE_VALID = DAY_DATE_VALID.plusDays(2L);
-	LocalTime DAY_START_TIME_1_VALID = LocalTime.now();
+	LocalTime DAY_START_TIME_1_VALID = LocalTime.NOON;
 	LocalTime DAY_END_TIME_1_VALID = DAY_START_TIME_1_VALID.plusHours(4L);
 	LocalTime DAY_START_TIME_2_VALID = DAY_END_TIME_1_VALID.plusHours(1L);
 	LocalTime DAY_END_TIME_2_VALID = DAY_START_TIME_2_VALID.plusHours(4L);

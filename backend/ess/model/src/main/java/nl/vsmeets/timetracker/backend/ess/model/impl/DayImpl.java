@@ -17,12 +17,14 @@ import org.hibernate.validator.constraints.time.DurationMin;
 
 import nl.vsmeets.timetracker.backend.ess.model.Day;
 import nl.vsmeets.timetracker.backend.ess.model.User;
+import nl.vsmeets.timetracker.backend.ess.model.impl.validation.ValidDay;
 
 /**
  * The implementation of a day.
  *
  * @author s230984
  */
+@ValidDay
 public class DayImpl implements Day {
 
 	/**
