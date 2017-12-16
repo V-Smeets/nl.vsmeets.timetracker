@@ -81,13 +81,45 @@ public class EntryImplTest extends AbstractValidationTest implements EntryConsta
 		@Test
 		public void testSetComment() {
 			entry.setComment(ENTRY_COMMENT_VALID);
+			validate(entry);
 			assertEquals(ENTRY_COMMENT_VALID, entry.getComment());
 		}
 
 		@Test
 		public void testSetDuration() {
 			entry.setDuration(ENTRY_DURATION_VALID);
+			validate(entry);
 			assertEquals(ENTRY_DURATION_VALID, entry.getDuration());
+		}
+
+		@Test
+		public void testSetDurationInvalidMaximum() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				entry.setDuration(ENTRY_DURATION_VALID_MAXIMUM.plusNanos(1L));
+				validate(entry);
+			});
+		}
+
+		@Test
+		public void testSetDurationInvalidMinimum() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				entry.setDuration(ENTRY_DURATION_VALID_MINIMUM.minusNanos(1L));
+				validate(entry);
+			});
+		}
+
+		@Test
+		public void testSetDurationValidMaximum() {
+			entry.setDuration(ENTRY_DURATION_VALID_MAXIMUM);
+			validate(entry);
+			assertEquals(ENTRY_DURATION_VALID_MAXIMUM, entry.getDuration());
+		}
+
+		@Test
+		public void testSetDurationValidMinimum() {
+			entry.setDuration(ENTRY_DURATION_VALID_MINIMUM);
+			validate(entry);
+			assertEquals(ENTRY_DURATION_VALID_MINIMUM, entry.getDuration());
 		}
 
 		@Test

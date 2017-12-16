@@ -8,6 +8,9 @@ import java.time.Duration;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
+
 import nl.vsmeets.timetracker.backend.ess.model.Assignment;
 import nl.vsmeets.timetracker.backend.ess.model.Day;
 import nl.vsmeets.timetracker.backend.ess.model.Entry;
@@ -36,6 +39,8 @@ public class EntryImpl implements Entry {
 	/**
 	 * The duration.
 	 */
+	@DurationMin
+	@DurationMax(days = 1, inclusive = false)
 	private Duration duration = null;
 
 	/**
