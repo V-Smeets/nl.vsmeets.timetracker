@@ -6,9 +6,6 @@ package nl.vsmeets.timetracker.backend.ess.model.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import nl.vsmeets.timetracker.backend.ess.model.PspElement;
 import nl.vsmeets.timetracker.backend.ess.model.Task;
 
@@ -22,14 +19,11 @@ public class TaskImpl implements Task {
 	/**
 	 * The PSP element.
 	 */
-	@NotNull
-	@Valid
 	private final PspElement pspElement;
 
 	/**
 	 * The name.
 	 */
-	@NotNull
 	private final String name;
 
 	/**
@@ -40,8 +34,6 @@ public class TaskImpl implements Task {
 	/**
 	 * The assignments.
 	 */
-	@NotNull
-	@Valid
 	private final Set<AssignmentImpl> assignments = new HashSet<>();
 
 	/**
@@ -54,7 +46,7 @@ public class TaskImpl implements Task {
 	 * @param description
 	 *            The description.
 	 */
-	public TaskImpl(@NotNull @Valid final PspElement pspElement, @NotNull final String name, final String description) {
+	public TaskImpl(final PspElement pspElement, final String name, final String description) {
 		super();
 		this.pspElement = pspElement;
 		this.name = name;

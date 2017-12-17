@@ -6,9 +6,6 @@ package nl.vsmeets.timetracker.backend.ess.model.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import nl.vsmeets.timetracker.backend.ess.model.Customer;
 import nl.vsmeets.timetracker.backend.ess.model.Project;
 
@@ -22,21 +19,16 @@ public class ProjectImpl implements Project {
 	/**
 	 * The customer.
 	 */
-	@NotNull
-	@Valid
 	private final Customer customer;
 
 	/**
 	 * The name.
 	 */
-	@NotNull
 	private final String name;
 
 	/**
 	 * The PSP elements.
 	 */
-	@NotNull
-	@Valid
 	private final Set<PspElementImpl> pspElements = new HashSet<>();
 
 	/**
@@ -47,7 +39,7 @@ public class ProjectImpl implements Project {
 	 * @param name
 	 *            The name.
 	 */
-	public ProjectImpl(@NotNull @Valid final Customer customer, @NotNull final String name) {
+	public ProjectImpl(final Customer customer, final String name) {
 		super();
 		this.customer = customer;
 		this.name = name;

@@ -7,9 +7,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
 import nl.vsmeets.timetracker.backend.ess.model.Assignment;
 import nl.vsmeets.timetracker.backend.ess.model.Task;
 import nl.vsmeets.timetracker.backend.ess.model.User;
@@ -26,34 +23,26 @@ public class AssignmentImpl implements Assignment {
 	/**
 	 * The user.
 	 */
-	@NotNull
-	@Valid
 	private final User user;
 
 	/**
 	 * The task.
 	 */
-	@NotNull
-	@Valid
 	private final Task task;
 
 	/**
 	 * The start date.
 	 */
-	@NotNull
 	private final LocalDate startDate;
 
 	/**
 	 * The end date.
 	 */
-	@NotNull
 	private final LocalDate endDate;
 
 	/**
 	 * The entries.
 	 */
-	@NotNull
-	@Valid
 	private final Set<EntryImpl> entries = new HashSet<>();
 
 	/**
@@ -68,8 +57,7 @@ public class AssignmentImpl implements Assignment {
 	 * @param endDate
 	 *            The end date.
 	 */
-	public AssignmentImpl(@NotNull @Valid final User user, @NotNull @Valid final Task task,
-			@NotNull final LocalDate startDate, @NotNull final LocalDate endDate) {
+	public AssignmentImpl(final User user, final Task task, final LocalDate startDate, final LocalDate endDate) {
 		super();
 		this.user = user;
 		this.task = task;

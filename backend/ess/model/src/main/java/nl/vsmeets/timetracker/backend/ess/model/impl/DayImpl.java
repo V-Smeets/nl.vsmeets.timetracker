@@ -9,12 +9,6 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.time.DurationMax;
-import org.hibernate.validator.constraints.time.DurationMin;
-
 import nl.vsmeets.timetracker.backend.ess.model.Day;
 import nl.vsmeets.timetracker.backend.ess.model.User;
 import nl.vsmeets.timetracker.backend.ess.model.impl.validation.ValidDay;
@@ -30,14 +24,11 @@ public class DayImpl implements Day {
 	/**
 	 * The user.
 	 */
-	@NotNull
-	@Valid
 	private final User user;
 
 	/**
 	 * The date.
 	 */
-	@NotNull
 	private final LocalDate date;
 
 	/**
@@ -63,15 +54,11 @@ public class DayImpl implements Day {
 	/**
 	 * The travel duration.
 	 */
-	@DurationMin
-	@DurationMax(days = 1, inclusive = false)
 	private Duration travelDuration;
 
 	/**
 	 * The entries.
 	 */
-	@NotNull
-	@Valid
 	private final Set<EntryImpl> entries = new HashSet<>();
 
 	/**
@@ -82,7 +69,7 @@ public class DayImpl implements Day {
 	 * @param date
 	 *            The date.
 	 */
-	public DayImpl(@NotNull @Valid final User user, @NotNull final LocalDate date) {
+	public DayImpl(final User user, final LocalDate date) {
 		super();
 		this.user = user;
 		this.date = date;

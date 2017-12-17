@@ -11,6 +11,9 @@ import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
+
 /**
  * A day on which some entries are made.
  *
@@ -68,6 +71,8 @@ public interface Day {
 	 *
 	 * @return The travel duration.
 	 */
+	@DurationMin
+	@DurationMax(days = 1, inclusive = false)
 	Duration getTravelDuration();
 
 	/**

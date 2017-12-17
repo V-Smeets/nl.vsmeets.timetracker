@@ -8,6 +8,9 @@ import java.time.Duration;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.time.DurationMax;
+import org.hibernate.validator.constraints.time.DurationMin;
+
 /**
  * An entry for an assigned task or PSP element.
  *
@@ -45,6 +48,8 @@ public interface Entry {
 	 *
 	 * @return The duration.
 	 */
+	@DurationMin
+	@DurationMax(days = 1, inclusive = false)
 	Duration getDuration();
 
 	/**
