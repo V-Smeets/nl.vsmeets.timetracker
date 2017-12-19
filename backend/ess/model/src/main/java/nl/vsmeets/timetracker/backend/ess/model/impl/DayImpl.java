@@ -6,11 +6,11 @@ package nl.vsmeets.timetracker.backend.ess.model.impl;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import nl.vsmeets.timetracker.backend.ess.model.Day;
-import nl.vsmeets.timetracker.backend.ess.model.User;
 import nl.vsmeets.timetracker.backend.ess.model.impl.validation.ValidDay;
 
 /**
@@ -24,7 +24,7 @@ public class DayImpl implements Day {
 	/**
 	 * The user.
 	 */
-	private final User user;
+	private final UserImpl user;
 
 	/**
 	 * The date.
@@ -34,32 +34,32 @@ public class DayImpl implements Day {
 	/**
 	 * The first start time.
 	 */
-	private LocalTime startTime1;
+	private final LocalTime startTime1;
 
 	/**
 	 * The first end time.
 	 */
-	private LocalTime endTime1;
+	private final LocalTime endTime1;
 
 	/**
 	 * The second start time.
 	 */
-	private LocalTime startTime2;
+	private final LocalTime startTime2;
 
 	/**
 	 * The second end time.
 	 */
-	private LocalTime endTime2;
+	private final LocalTime endTime2;
 
 	/**
 	 * The travel duration.
 	 */
-	private Duration travelDuration;
+	private final Duration travelDuration;
 
 	/**
 	 * The entries.
 	 */
-	private final Set<EntryImpl> entries = new HashSet<>();
+	private final Set<EntryImpl> entries;
 
 	/**
 	 * Create a new day.
@@ -69,14 +69,20 @@ public class DayImpl implements Day {
 	 * @param date
 	 *            The date.
 	 */
-	public DayImpl(final User user, final LocalDate date) {
+	public DayImpl(final UserImpl user, final LocalDate date, final LocalTime startTime1, final LocalTime endTime1,
+			final LocalTime startTime2, final LocalTime endTime2, final Duration travelDuration,
+			final Set<EntryImpl> entries) {
 		super();
-		this.user = user;
+		final Set<DayImpl> userDays = new CopyOnWriteArraySet<>(user.getDays());
+		userDays.add(this);
+		this.user = new UserImpl(user.getName(), user.getAssignments(), userDays);
 		this.date = date;
-		if (this.user instanceof UserImpl) {
-			final UserImpl userImpl = (UserImpl) this.user;
-			userImpl.getDays().add(this);
-		}
+		this.startTime1 = startTime1;
+		this.endTime1 = endTime1;
+		this.startTime2 = startTime2;
+		this.endTime2 = endTime2;
+		this.travelDuration = travelDuration;
+		this.entries = Collections.unmodifiableSet(new CopyOnWriteArraySet<>(entries));
 	}
 
 	@Override
@@ -144,7 +150,7 @@ public class DayImpl implements Day {
 	}
 
 	@Override
-	public User getUser() {
+	public UserImpl getUser() {
 		return user;
 	}
 
@@ -158,35 +164,25 @@ public class DayImpl implements Day {
 	}
 
 	@Override
-	public void setEndTime1(final LocalTime endTime1) {
-		this.endTime1 = endTime1;
-	}
-
-	@Override
-	public void setEndTime2(final LocalTime endTime2) {
-		this.endTime2 = endTime2;
-	}
-
-	@Override
-	public void setStartTime1(final LocalTime startTime1) {
-		this.startTime1 = startTime1;
-	}
-
-	@Override
-	public void setStartTime2(final LocalTime startTime2) {
-		this.startTime2 = startTime2;
-	}
-
-	@Override
-	public void setTravelDuration(final Duration travelDuration) {
-		this.travelDuration = travelDuration;
-	}
-
-	@Override
 	public String toString() {
 		return String.format(
 				"DayImpl [date=%s, startTime1=%s, endTime1=%s, startTime2=%s, endTime2=%s, travelDuration=%s]", date,
 				startTime1, endTime1, startTime2, endTime2, travelDuration);
+	}
+
+	@Override
+	public DayImpl withTime1(final LocalTime startTime, final LocalTime endTime) {
+		return new DayImpl(user, date, startTime, endTime, startTime2, endTime2, travelDuration, entries);
+	}
+
+	@Override
+	public DayImpl withTime2(final LocalTime startTime, final LocalTime endTime) {
+		return new DayImpl(user, date, startTime1, endTime1, startTime, endTime, travelDuration, entries);
+	}
+
+	@Override
+	public DayImpl withTravelDuration(final Duration travelDuration) {
+		return new DayImpl(user, date, startTime1, endTime1, startTime2, endTime2, travelDuration, entries);
 	}
 
 }

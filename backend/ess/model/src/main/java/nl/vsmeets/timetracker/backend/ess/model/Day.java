@@ -85,43 +85,34 @@ public interface Day {
 	User getUser();
 
 	/**
-	 * Set the first end time.
+	 * Create a new day with the first start and end times set.
 	 *
-	 * @param endTime1
-	 *            The first end time.
+	 * @param startTime
+	 *            The start time.
+	 * @param endTime
+	 *            The end time.
+	 * @return A new object with the first times set as specified.
 	 */
-	void setEndTime1(final LocalTime endTime1);
+	Day withTime1(final LocalTime startTime, final LocalTime endTime);
 
 	/**
-	 * Set the second end time.
+	 * Create a new day with the second start and end times set.
 	 *
-	 * @param endTime2
-	 *            The second end time.
+	 * @param startTime
+	 *            The start time.
+	 * @param endTime
+	 *            The end time.
+	 * @return A new object with the second times set as specified.
 	 */
-	void setEndTime2(final LocalTime endTime2);
+	Day withTime2(final LocalTime startTime, final LocalTime endTime);
 
 	/**
-	 * Set the first start time.
-	 *
-	 * @param startTime1
-	 *            The first start time.
-	 */
-	void setStartTime1(final LocalTime startTime1);
-
-	/**
-	 * Set the second start time.
-	 *
-	 * @param startTime2
-	 *            The second start time.
-	 */
-	void setStartTime2(final LocalTime startTime2);
-
-	/**
-	 * Set the travel duration.
+	 * Create a new day with the travel duration set.
 	 *
 	 * @param travelDuration
 	 *            The travel duration.
+	 * @return A new object with the travel duration set as specified.
 	 */
-	void setTravelDuration(final Duration travelDuration);
+	Day withTravelDuration(final Duration travelDuration);
 
 }

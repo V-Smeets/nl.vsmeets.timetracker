@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
@@ -27,7 +28,8 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 
 		@BeforeEach
 		public void createAssignment() {
-			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE);
+			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE,
+					Collections.emptySet());
 			assertNotNull(assignment);
 			validate(assignment);
 		}
@@ -116,7 +118,8 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 
 	@Test
 	public void testAssignmentImpl() {
-		assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE);
+		assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE,
+				Collections.emptySet());
 		assertNotNull(assignment);
 		validate(assignment);
 	}
@@ -124,7 +127,8 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 	@Test
 	public void testAssignmentImplDateOrder() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_END_DATE, ASSIGNMENT_START_DATE);
+			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_END_DATE, ASSIGNMENT_START_DATE,
+					Collections.emptySet());
 			assertNotNull(assignment);
 			validate(assignment);
 		});
@@ -133,7 +137,7 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 	@Test
 	public void testAssignmentImplNullEndDate() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_START_DATE, null);
+			assignment = new AssignmentImpl(getUser(), getTask(), ASSIGNMENT_START_DATE, null, Collections.emptySet());
 			assertNotNull(assignment);
 			validate(assignment);
 		});
@@ -142,7 +146,7 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 	@Test
 	public void testAssignmentImplNullStartDate() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			assignment = new AssignmentImpl(getUser(), getTask(), null, ASSIGNMENT_END_DATE);
+			assignment = new AssignmentImpl(getUser(), getTask(), null, ASSIGNMENT_END_DATE, Collections.emptySet());
 			assertNotNull(assignment);
 			validate(assignment);
 		});
@@ -151,7 +155,7 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 	@Test
 	public void testAssignmentImplNullStartDateNullEndDate() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			assignment = new AssignmentImpl(getUser(), getTask(), null, null);
+			assignment = new AssignmentImpl(getUser(), getTask(), null, null, Collections.emptySet());
 			assertNotNull(assignment);
 			validate(assignment);
 		});
@@ -159,19 +163,17 @@ public class AssignmentImplTest extends AbstractValidationTest implements Assign
 
 	@Test
 	public void testAssignmentImplNullTask() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			assignment = new AssignmentImpl(getUser(), null, ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE);
-			assertNotNull(assignment);
-			validate(assignment);
+		assertThrows(NullPointerException.class, () -> {
+			assignment = new AssignmentImpl(getUser(), null, ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE,
+					Collections.emptySet());
 		});
 	}
 
 	@Test
 	public void testAssignmentImplNullUser() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			assignment = new AssignmentImpl(null, getTask(), ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE);
-			assertNotNull(assignment);
-			validate(assignment);
+		assertThrows(NullPointerException.class, () -> {
+			assignment = new AssignmentImpl(null, getTask(), ASSIGNMENT_START_DATE, ASSIGNMENT_END_DATE,
+					Collections.emptySet());
 		});
 	}
 

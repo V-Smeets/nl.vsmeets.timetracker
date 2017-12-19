@@ -3,8 +3,9 @@
  */
 package nl.vsmeets.timetracker.backend.ess.model.impl;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import nl.vsmeets.timetracker.backend.ess.model.User;
 
@@ -23,12 +24,12 @@ public class UserImpl implements User {
 	/**
 	 * The assignments.
 	 */
-	private final Set<AssignmentImpl> assignments = new HashSet<>();
+	private final Set<AssignmentImpl> assignments;
 
 	/**
 	 * The days.
 	 */
-	private final Set<DayImpl> days = new HashSet<>();
+	private final Set<DayImpl> days;
 
 	/**
 	 * Create a user.
@@ -36,9 +37,11 @@ public class UserImpl implements User {
 	 * @param name
 	 *            The name.
 	 */
-	public UserImpl(final String name) {
+	public UserImpl(final String name, final Set<AssignmentImpl> assignments, final Set<DayImpl> days) {
 		super();
 		this.name = name;
+		this.assignments = Collections.unmodifiableSet(new CopyOnWriteArraySet<>(assignments));
+		this.days = Collections.unmodifiableSet(new CopyOnWriteArraySet<>(days));
 	}
 
 	@Override

@@ -58,7 +58,7 @@ public interface Entry {
 	 * @param comment
 	 *            The comment.
 	 */
-	void setComment(final String comment);
+	Entry withComment(final String comment);
 
 	/**
 	 * Set the duration.
@@ -66,6 +66,6 @@ public interface Entry {
 	 * @param duration
 	 *            The duration.
 	 */
-	void setDuration(final Duration duration);
+	Entry withDuration(final Duration duration);
 
 }

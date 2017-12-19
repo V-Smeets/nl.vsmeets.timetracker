@@ -3,8 +3,8 @@ package nl.vsmeets.timetracker.backend.ess.model.test;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 
-import nl.vsmeets.timetracker.backend.ess.model.Day;
 import nl.vsmeets.timetracker.backend.ess.model.impl.DayImpl;
 
 public interface DayConstants extends UserConstants {
@@ -21,16 +21,16 @@ public interface DayConstants extends UserConstants {
 	Duration DAY_TRAVEL_DURATION_VALID_MINIMUM = Duration.ZERO;
 	Duration DAY_TRAVEL_DURATION_VALID_MAXIMUM = Duration.ofDays(1L).minusNanos(1L);
 
-	default Day getDay() {
-		return new DayImpl(getUser(), DAY_DATE_VALID);
+	default DayImpl getDay() {
+		return new DayImpl(getUser(), DAY_DATE_VALID, null, null, null, null, null, Collections.emptySet());
 	}
 
-	default Day getDayOtherDate() {
-		return new DayImpl(getUser(), DAY_OTHER_DATE_VALID);
+	default DayImpl getDayOtherDate() {
+		return new DayImpl(getUser(), DAY_OTHER_DATE_VALID, null, null, null, null, null, Collections.emptySet());
 	}
 
-	default Day getDayOtherUser() {
-		return new DayImpl(getUserOtherName(), DAY_DATE_VALID);
+	default DayImpl getDayOtherUser() {
+		return new DayImpl(getUserOtherName(), DAY_DATE_VALID, null, null, null, null, null, Collections.emptySet());
 	}
 
 }

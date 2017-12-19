@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
+
 import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,7 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 
 		@BeforeEach
 		public void createDay() {
-			day = new DayImpl(getUser(), DAY_DATE_VALID);
+			day = new DayImpl(getUser(), DAY_DATE_VALID, null, null, null, null, null, Collections.emptySet());
 			assertNotNull(day);
 			validate(day);
 		}
@@ -106,116 +108,42 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 		@Test
 		public void testOnlyEndTime1() {
 			assertThrows(ConstraintViolationException.class, () -> {
-				day.setEndTime1(DAY_END_TIME_1_VALID);
-				validate(day);
+				validate(day.withTime1(null, DAY_END_TIME_1_VALID));
 			});
 		}
 
 		@Test
 		public void testOnlyEndTime2() {
 			assertThrows(ConstraintViolationException.class, () -> {
-				day.setEndTime2(DAY_END_TIME_2_VALID);
-				validate(day);
+				validate(day.withTime2(null, DAY_END_TIME_2_VALID));
 			});
 		}
 
 		@Test
 		public void testOnlyStartTime1() {
 			assertThrows(ConstraintViolationException.class, () -> {
-				day.setStartTime1(DAY_START_TIME_1_VALID);
-				validate(day);
+				validate(day.withTime1(DAY_START_TIME_1_VALID, null));
 			});
 		}
 
 		@Test
 		public void testOnlyStartTime2() {
 			assertThrows(ConstraintViolationException.class, () -> {
-				day.setStartTime2(DAY_START_TIME_2_VALID);
-				validate(day);
+				validate(day.withTime2(DAY_START_TIME_2_VALID, null));
 			});
-		}
-
-		@Test
-		public void testSetEndTime1() {
-			day.setEndTime1(DAY_END_TIME_1_VALID);
-			assertEquals(DAY_END_TIME_1_VALID, day.getEndTime1());
-		}
-
-		@Test
-		public void testSetEndTime2() {
-			day.setEndTime2(DAY_END_TIME_2_VALID);
-			assertEquals(DAY_END_TIME_2_VALID, day.getEndTime2());
-		}
-
-		@Test
-		public void testSetStartTime1() {
-			day.setStartTime1(DAY_START_TIME_1_VALID);
-			assertEquals(DAY_START_TIME_1_VALID, day.getStartTime1());
-		}
-
-		@Test
-		public void testSetStartTime2() {
-			day.setStartTime2(DAY_START_TIME_2_VALID);
-			assertEquals(DAY_START_TIME_2_VALID, day.getStartTime2());
-		}
-
-		@Test
-		public void testSetStartTime2Invalid() {
-			assertThrows(ConstraintViolationException.class, () -> {
-				day.setStartTime1(DAY_START_TIME_1_VALID);
-				day.setEndTime1(DAY_START_TIME_2_VALID);
-				day.setStartTime2(DAY_END_TIME_1_VALID);
-				day.setEndTime2(DAY_END_TIME_2_VALID);
-				validate(day);
-			});
-		}
-
-		@Test
-		public void testSetTime1Invalid() {
-			assertThrows(ConstraintViolationException.class, () -> {
-				day.setStartTime1(DAY_END_TIME_1_VALID);
-				day.setEndTime1(DAY_START_TIME_1_VALID);
-				validate(day);
-			});
-		}
-
-		@Test
-		public void testSetTime1Valid() {
-			day.setStartTime1(DAY_START_TIME_1_VALID);
-			day.setEndTime1(DAY_END_TIME_1_VALID);
-			validate(day);
-		}
-
-		@Test
-		public void testSetTime2Invalid() {
-			assertThrows(ConstraintViolationException.class, () -> {
-				day.setStartTime1(DAY_START_TIME_1_VALID);
-				day.setEndTime1(DAY_END_TIME_1_VALID);
-				day.setStartTime2(DAY_END_TIME_2_VALID);
-				day.setEndTime2(DAY_START_TIME_2_VALID);
-				validate(day);
-			});
-		}
-
-		@Test
-		public void testSetTime2Valid() {
-			day.setStartTime1(DAY_START_TIME_1_VALID);
-			day.setEndTime1(DAY_END_TIME_1_VALID);
-			day.setStartTime2(DAY_START_TIME_2_VALID);
-			day.setEndTime2(DAY_END_TIME_2_VALID);
-			validate(day);
 		}
 
 		@Test
 		public void testSetTravelDuration() {
-			day.setTravelDuration(DAY_TRAVEL_DURATION_VALID);
+			day = day.withTravelDuration(DAY_TRAVEL_DURATION_VALID);
+			validate(day);
 			assertEquals(DAY_TRAVEL_DURATION_VALID, day.getTravelDuration());
 		}
 
 		@Test
 		public void testSetTravelDurationInvalidMaximum() {
 			assertThrows(ConstraintViolationException.class, () -> {
-				day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MAXIMUM.plusNanos(1L));
+				day = day.withTravelDuration(DAY_TRAVEL_DURATION_VALID_MAXIMUM.plusNanos(1L));
 				validate(day);
 			});
 		}
@@ -223,47 +151,30 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 		@Test
 		public void testSetTravelDurationInvalidMinimum() {
 			assertThrows(ConstraintViolationException.class, () -> {
-				day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MINIMUM.minusNanos(1L));
+				day = day.withTravelDuration(DAY_TRAVEL_DURATION_VALID_MINIMUM.minusNanos(1L));
 				validate(day);
 			});
 		}
 
 		@Test
 		public void testSetTravelDurationNull() {
-			day.setTravelDuration(null);
+			day = day.withTravelDuration(null);
+			validate(day);
 			assertNull(day.getTravelDuration());
 		}
 
 		@Test
 		public void testSetTravelDurationValidMaximum() {
-			day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MAXIMUM);
+			day = day.withTravelDuration(DAY_TRAVEL_DURATION_VALID_MAXIMUM);
+			validate(day);
 			assertEquals(DAY_TRAVEL_DURATION_VALID_MAXIMUM, day.getTravelDuration());
 		}
 
 		@Test
 		public void testSetTravelDurationValidMinimum() {
-			day.setTravelDuration(DAY_TRAVEL_DURATION_VALID_MINIMUM);
+			day = day.withTravelDuration(DAY_TRAVEL_DURATION_VALID_MINIMUM);
+			validate(day);
 			assertEquals(DAY_TRAVEL_DURATION_VALID_MINIMUM, day.getTravelDuration());
-		}
-
-		@Test
-		public void testTime1OnlyEndTime2() {
-			assertThrows(ConstraintViolationException.class, () -> {
-				day.setStartTime1(DAY_START_TIME_1_VALID);
-				day.setEndTime1(DAY_END_TIME_1_VALID);
-				day.setEndTime2(DAY_END_TIME_2_VALID);
-				validate(day);
-			});
-		}
-
-		@Test
-		public void testTime1OnlyStartTime2() {
-			assertThrows(ConstraintViolationException.class, () -> {
-				day.setStartTime1(DAY_START_TIME_1_VALID);
-				day.setEndTime1(DAY_END_TIME_1_VALID);
-				day.setStartTime2(DAY_START_TIME_2_VALID);
-				validate(day);
-			});
 		}
 
 		@Test
@@ -275,13 +186,64 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 			assertEquals(expected, string.substring(0, expected.length()));
 		}
 
+		@Test
+		public void testWithTime1() {
+			day = day.withTime1(DAY_START_TIME_1_VALID, DAY_END_TIME_1_VALID);
+			validate(day);
+			assertEquals(DAY_START_TIME_1_VALID, day.getStartTime1());
+			assertEquals(DAY_END_TIME_1_VALID, day.getEndTime1());
+		}
+
+		@Test
+		public void testWithTime1Invalid() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				day = day.withTime1(DAY_END_TIME_1_VALID, DAY_START_TIME_1_VALID);
+				validate(day);
+			});
+		}
+
+		@Test
+		public void testWithTime1WithStartTime2Invalid() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				day = day.withTime1(DAY_START_TIME_1_VALID, DAY_START_TIME_2_VALID);
+				day = day.withTime2(DAY_END_TIME_1_VALID, DAY_END_TIME_2_VALID);
+				validate(day);
+			});
+		}
+
+		@Test
+		public void testWithTime1WithTime2() {
+			day = day.withTime1(DAY_START_TIME_1_VALID, DAY_END_TIME_1_VALID);
+			day = day.withTime2(DAY_START_TIME_2_VALID, DAY_END_TIME_2_VALID);
+			validate(day);
+			assertEquals(DAY_START_TIME_2_VALID, day.getStartTime2());
+			assertEquals(DAY_END_TIME_2_VALID, day.getEndTime2());
+		}
+
+		@Test
+		public void testWithTime1WithTime2Invalid() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				day = day.withTime1(DAY_START_TIME_1_VALID, DAY_END_TIME_1_VALID);
+				day = day.withTime2(DAY_END_TIME_2_VALID, DAY_START_TIME_2_VALID);
+				validate(day);
+			});
+		}
+
+		@Test
+		public void testWithTime2() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				day = day.withTime2(DAY_START_TIME_2_VALID, DAY_END_TIME_2_VALID);
+				validate(day);
+			});
+		}
+
 	}
 
 	private DayImpl day;
 
 	@Test
 	public void testDayImpl() {
-		day = new DayImpl(getUser(), DAY_DATE_VALID);
+		day = new DayImpl(getUser(), DAY_DATE_VALID, null, null, null, null, null, Collections.emptySet());
 		assertNotNull(day);
 		validate(day);
 	}
@@ -289,7 +251,7 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 	@Test
 	public void testDayImplNullDate() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			day = new DayImpl(getUser(), null);
+			day = new DayImpl(getUser(), null, null, null, null, null, null, Collections.emptySet());
 			assertNotNull(day);
 			validate(day);
 		});
@@ -297,10 +259,8 @@ public class DayImplTest extends AbstractValidationTest implements DayConstants 
 
 	@Test
 	public void testDayImplNullUser() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			day = new DayImpl(null, DAY_DATE_VALID);
-			assertNotNull(day);
-			validate(day);
+		assertThrows(NullPointerException.class, () -> {
+			day = new DayImpl(null, DAY_DATE_VALID, null, null, null, null, null, Collections.emptySet());
 		});
 	}
 

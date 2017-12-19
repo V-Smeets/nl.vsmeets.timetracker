@@ -1,6 +1,7 @@
 package nl.vsmeets.timetracker.backend.ess.model.test;
 
-import nl.vsmeets.timetracker.backend.ess.model.PspElement;
+import java.util.Collections;
+
 import nl.vsmeets.timetracker.backend.ess.model.impl.PspElementImpl;
 
 public interface PspElementConstants extends ProjectConstants {
@@ -11,16 +12,19 @@ public interface PspElementConstants extends ProjectConstants {
 	String PSP_ELEMENT_OTHER_NAME_VALID = "Other PSP Element name";
 	String PSP_ELEMENT_DESCRIPTION_VALID = "PSP Element description";
 
-	default PspElement getPspElement() {
-		return new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
+	default PspElementImpl getPspElement() {
+		return new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID,
+				Collections.emptySet());
 	}
 
-	default PspElement getPspElementOtherName() {
-		return new PspElementImpl(getProject(), PSP_ELEMENT_OTHER_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
+	default PspElementImpl getPspElementOtherName() {
+		return new PspElementImpl(getProject(), PSP_ELEMENT_OTHER_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID,
+				Collections.emptySet());
 	}
 
-	default PspElement getPspElementOtherProject() {
-		return new PspElementImpl(getProjectOtherName(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
+	default PspElementImpl getPspElementOtherProject() {
+		return new PspElementImpl(getProjectOtherName(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID,
+				Collections.emptySet());
 	}
 
 }

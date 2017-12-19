@@ -2,6 +2,7 @@ package nl.vsmeets.timetracker.backend.ess.model.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,7 +23,7 @@ public class EntryImplTest extends AbstractValidationTest implements EntryConsta
 
 		@BeforeEach
 		public void createEntry() {
-			entry = new EntryImpl(getDay(), getAssignment());
+			entry = new EntryImpl(getDay(), getAssignment(), null, null);
 			assertNotNull(entry);
 			validate(entry);
 		}
@@ -79,47 +80,8 @@ public class EntryImplTest extends AbstractValidationTest implements EntryConsta
 		}
 
 		@Test
-		public void testSetComment() {
-			entry.setComment(ENTRY_COMMENT_VALID);
-			validate(entry);
-			assertEquals(ENTRY_COMMENT_VALID, entry.getComment());
-		}
-
-		@Test
-		public void testSetDuration() {
-			entry.setDuration(ENTRY_DURATION_VALID);
-			validate(entry);
-			assertEquals(ENTRY_DURATION_VALID, entry.getDuration());
-		}
-
-		@Test
-		public void testSetDurationInvalidMaximum() {
-			assertThrows(ConstraintViolationException.class, () -> {
-				entry.setDuration(ENTRY_DURATION_VALID_MAXIMUM.plusNanos(1L));
-				validate(entry);
-			});
-		}
-
-		@Test
-		public void testSetDurationInvalidMinimum() {
-			assertThrows(ConstraintViolationException.class, () -> {
-				entry.setDuration(ENTRY_DURATION_VALID_MINIMUM.minusNanos(1L));
-				validate(entry);
-			});
-		}
-
-		@Test
-		public void testSetDurationValidMaximum() {
-			entry.setDuration(ENTRY_DURATION_VALID_MAXIMUM);
-			validate(entry);
-			assertEquals(ENTRY_DURATION_VALID_MAXIMUM, entry.getDuration());
-		}
-
-		@Test
-		public void testSetDurationValidMinimum() {
-			entry.setDuration(ENTRY_DURATION_VALID_MINIMUM);
-			validate(entry);
-			assertEquals(ENTRY_DURATION_VALID_MINIMUM, entry.getDuration());
+		public void testHashCode() {
+			assertNotEquals(0, entry.hashCode());
 		}
 
 		@Test
@@ -131,32 +93,72 @@ public class EntryImplTest extends AbstractValidationTest implements EntryConsta
 			assertEquals(expected, string.substring(0, expected.length()));
 		}
 
+		@Test
+		public void testWithComment() {
+			entry = entry.withComment(ENTRY_COMMENT_VALID);
+			validate(entry);
+			assertEquals(ENTRY_COMMENT_VALID, entry.getComment());
+		}
+
+		@Test
+		public void testWithDuration() {
+			entry = entry.withDuration(ENTRY_DURATION_VALID);
+			validate(entry);
+			assertEquals(ENTRY_DURATION_VALID, entry.getDuration());
+		}
+
+		@Test
+		public void testWithDurationInvalidMaximum() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				entry = entry.withDuration(ENTRY_DURATION_VALID_MAXIMUM.plusNanos(1L));
+				validate(entry);
+			});
+		}
+
+		@Test
+		public void testWithDurationInvalidMinimum() {
+			assertThrows(ConstraintViolationException.class, () -> {
+				entry = entry.withDuration(ENTRY_DURATION_VALID_MINIMUM.minusNanos(1L));
+				validate(entry);
+			});
+		}
+
+		@Test
+		public void testWithDurationValidMaximum() {
+			entry = entry.withDuration(ENTRY_DURATION_VALID_MAXIMUM);
+			validate(entry);
+			assertEquals(ENTRY_DURATION_VALID_MAXIMUM, entry.getDuration());
+		}
+
+		@Test
+		public void testWithDurationValidMinimum() {
+			entry = entry.withDuration(ENTRY_DURATION_VALID_MINIMUM);
+			validate(entry);
+			assertEquals(ENTRY_DURATION_VALID_MINIMUM, entry.getDuration());
+		}
+
 	}
 
 	private EntryImpl entry;
 
 	@Test
 	public void testEntryImpl() {
-		entry = new EntryImpl(getDay(), getAssignment());
+		entry = new EntryImpl(getDay(), getAssignment(), null, null);
 		assertNotNull(entry);
 		validate(entry);
 	}
 
 	@Test
 	public void testEntryImplNullAssignment() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			entry = new EntryImpl(getDay(), null);
-			assertNotNull(entry);
-			validate(entry);
+		assertThrows(NullPointerException.class, () -> {
+			entry = new EntryImpl(getDay(), null, null, null);
 		});
 	}
 
 	@Test
 	public void testEntryImplNullDay() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			entry = new EntryImpl(null, getAssignment());
-			assertNotNull(entry);
-			validate(entry);
+		assertThrows(NullPointerException.class, () -> {
+			entry = new EntryImpl(null, getAssignment(), null, null);
 		});
 	}
 

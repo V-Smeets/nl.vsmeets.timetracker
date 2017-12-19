@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
@@ -26,7 +27,7 @@ public class TaskImplTest extends AbstractValidationTest implements TaskConstant
 
 		@BeforeEach
 		public void createTask() {
-			task = new TaskImpl(getPspElement(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID);
+			task = new TaskImpl(getPspElement(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID, Collections.emptySet());
 			assertNotNull(task);
 			validate(task);
 		}
@@ -107,14 +108,14 @@ public class TaskImplTest extends AbstractValidationTest implements TaskConstant
 
 	@Test
 	public void testTaskImpl() {
-		task = new TaskImpl(getPspElement(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID);
+		task = new TaskImpl(getPspElement(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID, Collections.emptySet());
 		assertNotNull(task);
 		validate(task);
 	}
 
 	@Test
 	public void testTaskImplNullDescription() {
-		task = new TaskImpl(getPspElement(), TASK_NAME_VALID, null);
+		task = new TaskImpl(getPspElement(), TASK_NAME_VALID, null, Collections.emptySet());
 		assertNotNull(task);
 		validate(task);
 	}
@@ -122,7 +123,7 @@ public class TaskImplTest extends AbstractValidationTest implements TaskConstant
 	@Test
 	public void testTaskImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			task = new TaskImpl(getPspElement(), null, TASK_DESCRIPTION_VALID);
+			task = new TaskImpl(getPspElement(), null, TASK_DESCRIPTION_VALID, Collections.emptySet());
 			assertNotNull(task);
 			validate(task);
 		});
@@ -130,10 +131,8 @@ public class TaskImplTest extends AbstractValidationTest implements TaskConstant
 
 	@Test
 	public void testTaskImplNullPspElement() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			task = new TaskImpl(null, TASK_NAME_VALID, TASK_DESCRIPTION_VALID);
-			assertNotNull(task);
-			validate(task);
+		assertThrows(NullPointerException.class, () -> {
+			task = new TaskImpl(null, TASK_NAME_VALID, TASK_DESCRIPTION_VALID, Collections.emptySet());
 		});
 	}
 

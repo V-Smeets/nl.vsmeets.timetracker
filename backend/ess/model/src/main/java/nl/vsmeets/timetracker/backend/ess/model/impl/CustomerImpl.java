@@ -3,8 +3,9 @@
  */
 package nl.vsmeets.timetracker.backend.ess.model.impl;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import nl.vsmeets.timetracker.backend.ess.model.Customer;
 
@@ -15,8 +16,6 @@ import nl.vsmeets.timetracker.backend.ess.model.Customer;
  */
 public class CustomerImpl implements Customer {
 
-	// TODO Make all classes immutable.
-
 	/**
 	 * The name of the customer.
 	 */
@@ -25,7 +24,7 @@ public class CustomerImpl implements Customer {
 	/**
 	 * The projects of this customer.
 	 */
-	private final Set<ProjectImpl> projects = new HashSet<>();
+	private final Set<ProjectImpl> projects;
 
 	/**
 	 * Create a new customer.
@@ -33,9 +32,10 @@ public class CustomerImpl implements Customer {
 	 * @param name
 	 *            The name of the customer.
 	 */
-	public CustomerImpl(final String name) {
+	public CustomerImpl(final String name, final Set<ProjectImpl> projects) {
 		super();
 		this.name = name;
+		this.projects = Collections.unmodifiableSet(new CopyOnWriteArraySet<>(projects));
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
@@ -26,7 +27,7 @@ class ProjectImplTest extends AbstractValidationTest implements ProjectConstants
 
 		@BeforeEach
 		public void createProject() {
-			project = new ProjectImpl(getCustomer(), PROJECT_NAME_VALID);
+			project = new ProjectImpl(getCustomer(), PROJECT_NAME_VALID, Collections.emptySet());
 			assertNotNull(project);
 			validate(project);
 		}
@@ -102,24 +103,22 @@ class ProjectImplTest extends AbstractValidationTest implements ProjectConstants
 
 	@Test
 	public void testProjectImpl() {
-		project = new ProjectImpl(getCustomer(), PROJECT_NAME_VALID);
+		project = new ProjectImpl(getCustomer(), PROJECT_NAME_VALID, Collections.emptySet());
 		assertNotNull(project);
 		validate(project);
 	}
 
 	@Test
 	public void testProjectImplNullCustomer() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			project = new ProjectImpl(null, PROJECT_NAME_VALID);
-			assertNotNull(project);
-			validate(project);
+		assertThrows(NullPointerException.class, () -> {
+			project = new ProjectImpl(null, PROJECT_NAME_VALID, Collections.emptySet());
 		});
 	}
 
 	@Test
 	public void testProjectImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			project = new ProjectImpl(getCustomer(), null);
+			project = new ProjectImpl(getCustomer(), null, Collections.emptySet());
 			assertNotNull(project);
 			validate(project);
 		});

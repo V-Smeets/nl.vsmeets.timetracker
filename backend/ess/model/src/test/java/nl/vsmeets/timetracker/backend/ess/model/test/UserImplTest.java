@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
@@ -26,7 +27,7 @@ public class UserImplTest extends AbstractValidationTest implements UserConstant
 
 		@BeforeEach
 		public void createUser() {
-			user = new UserImpl(USER_NAME_VALID);
+			user = new UserImpl(USER_NAME_VALID, Collections.emptySet(), Collections.emptySet());
 			assertNotNull(user);
 			validate(user);
 		}
@@ -96,7 +97,7 @@ public class UserImplTest extends AbstractValidationTest implements UserConstant
 
 	@Test
 	public void testUserImpl() {
-		user = new UserImpl(USER_NAME_VALID);
+		user = new UserImpl(USER_NAME_VALID, Collections.emptySet(), Collections.emptySet());
 		assertNotNull(user);
 		validate(user);
 	}
@@ -104,7 +105,7 @@ public class UserImplTest extends AbstractValidationTest implements UserConstant
 	@Test
 	public void testUserImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			user = new UserImpl(null);
+			user = new UserImpl(null, Collections.emptySet(), Collections.emptySet());
 			validate(user);
 		});
 	}

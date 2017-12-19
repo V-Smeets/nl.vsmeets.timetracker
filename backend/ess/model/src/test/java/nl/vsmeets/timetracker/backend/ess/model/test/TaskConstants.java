@@ -1,6 +1,7 @@
 package nl.vsmeets.timetracker.backend.ess.model.test;
 
-import nl.vsmeets.timetracker.backend.ess.model.Task;
+import java.util.Collections;
+
 import nl.vsmeets.timetracker.backend.ess.model.impl.TaskImpl;
 
 public interface TaskConstants extends PspElementConstants {
@@ -11,16 +12,17 @@ public interface TaskConstants extends PspElementConstants {
 	String TASK_OTHER_NAME_VALID = "Other Task name";
 	String TASK_DESCRIPTION_VALID = "Task description";
 
-	default Task getTask() {
-		return new TaskImpl(getPspElement(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID);
+	default TaskImpl getTask() {
+		return new TaskImpl(getPspElement(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID, Collections.emptySet());
 	}
 
-	default Task getTaskOtherName() {
-		return new TaskImpl(getPspElement(), TASK_OTHER_NAME_VALID, TASK_DESCRIPTION_VALID);
+	default TaskImpl getTaskOtherName() {
+		return new TaskImpl(getPspElement(), TASK_OTHER_NAME_VALID, TASK_DESCRIPTION_VALID, Collections.emptySet());
 	}
 
-	default Task getTaskOtherPspElement() {
-		return new TaskImpl(getPspElementOtherProject(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID);
+	default TaskImpl getTaskOtherPspElement() {
+		return new TaskImpl(getPspElementOtherProject(), TASK_NAME_VALID, TASK_DESCRIPTION_VALID,
+				Collections.emptySet());
 	}
 
 }

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
@@ -26,7 +27,8 @@ public class PspElementImplTest extends AbstractValidationTest implements PspEle
 
 		@BeforeEach
 		public void createPspElement() {
-			pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
+			pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID,
+					Collections.emptySet());
 			assertNotNull(pspElement);
 			validate(pspElement);
 		}
@@ -107,14 +109,15 @@ public class PspElementImplTest extends AbstractValidationTest implements PspEle
 
 	@Test
 	public void testPspElementImpl() {
-		pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
+		pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID,
+				Collections.emptySet());
 		assertNotNull(pspElement);
 		validate(pspElement);
 	}
 
 	@Test
 	public void testPspElementImplNullDescription() {
-		pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, null);
+		pspElement = new PspElementImpl(getProject(), PSP_ELEMENT_NAME_VALID, null, Collections.emptySet());
 		assertNotNull(pspElement);
 		validate(pspElement);
 	}
@@ -122,7 +125,7 @@ public class PspElementImplTest extends AbstractValidationTest implements PspEle
 	@Test
 	public void testPspElementImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			pspElement = new PspElementImpl(getProject(), null, PSP_ELEMENT_DESCRIPTION_VALID);
+			pspElement = new PspElementImpl(getProject(), null, PSP_ELEMENT_DESCRIPTION_VALID, Collections.emptySet());
 			assertNotNull(pspElement);
 			validate(pspElement);
 		});
@@ -130,10 +133,9 @@ public class PspElementImplTest extends AbstractValidationTest implements PspEle
 
 	@Test
 	public void testPspElementImplNullProject() {
-		assertThrows(ConstraintViolationException.class, () -> {
-			pspElement = new PspElementImpl(null, PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID);
-			assertNotNull(pspElement);
-			validate(pspElement);
+		assertThrows(NullPointerException.class, () -> {
+			pspElement = new PspElementImpl(null, PSP_ELEMENT_NAME_VALID, PSP_ELEMENT_DESCRIPTION_VALID,
+					Collections.emptySet());
 		});
 	}
 

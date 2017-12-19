@@ -4,12 +4,11 @@
 package nl.vsmeets.timetracker.backend.ess.model.impl;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import nl.vsmeets.timetracker.backend.ess.model.Assignment;
-import nl.vsmeets.timetracker.backend.ess.model.Task;
-import nl.vsmeets.timetracker.backend.ess.model.User;
 import nl.vsmeets.timetracker.backend.ess.model.impl.validation.ValidAssignment;
 
 /**
@@ -23,12 +22,12 @@ public class AssignmentImpl implements Assignment {
 	/**
 	 * The user.
 	 */
-	private final User user;
+	private final UserImpl user;
 
 	/**
 	 * The task.
 	 */
-	private final Task task;
+	private final TaskImpl task;
 
 	/**
 	 * The start date.
@@ -43,7 +42,7 @@ public class AssignmentImpl implements Assignment {
 	/**
 	 * The entries.
 	 */
-	private final Set<EntryImpl> entries = new HashSet<>();
+	private final Set<EntryImpl> entries;
 
 	/**
 	 * Create a new assignment.
@@ -57,20 +56,18 @@ public class AssignmentImpl implements Assignment {
 	 * @param endDate
 	 *            The end date.
 	 */
-	public AssignmentImpl(final User user, final Task task, final LocalDate startDate, final LocalDate endDate) {
+	public AssignmentImpl(final UserImpl user, final TaskImpl task, final LocalDate startDate, final LocalDate endDate,
+			final Set<EntryImpl> entries) {
 		super();
-		this.user = user;
-		this.task = task;
+		final Set<AssignmentImpl> userAssignments = new CopyOnWriteArraySet<>(user.getAssignments());
+		userAssignments.add(this);
+		this.user = new UserImpl(user.getName(), userAssignments, user.getDays());
+		final Set<AssignmentImpl> taskAssignments = new CopyOnWriteArraySet<>(task.getAssignments());
+		taskAssignments.add(this);
+		this.task = new TaskImpl(task.getPspElement(), task.getName(), task.getDescription(), taskAssignments);
 		this.startDate = startDate;
 		this.endDate = endDate;
-		if (this.user instanceof UserImpl) {
-			final UserImpl userImpl = (UserImpl) this.user;
-			userImpl.getAssignments().add(this);
-		}
-		if (this.task instanceof TaskImpl) {
-			final TaskImpl taskImpl = (TaskImpl) this.task;
-			taskImpl.getAssignments().add(this);
-		}
+		this.entries = Collections.unmodifiableSet(new CopyOnWriteArraySet<>(entries));
 	}
 
 	@Override
@@ -118,12 +115,12 @@ public class AssignmentImpl implements Assignment {
 	}
 
 	@Override
-	public Task getTask() {
+	public TaskImpl getTask() {
 		return task;
 	}
 
 	@Override
-	public User getUser() {
+	public UserImpl getUser() {
 		return user;
 	}
 

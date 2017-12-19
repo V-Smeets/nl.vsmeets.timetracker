@@ -1,6 +1,7 @@
 package nl.vsmeets.timetracker.backend.ess.model.test;
 
-import nl.vsmeets.timetracker.backend.ess.model.Customer;
+import java.util.Collections;
+
 import nl.vsmeets.timetracker.backend.ess.model.impl.CustomerImpl;
 
 public interface CustomerConstants {
@@ -10,12 +11,12 @@ public interface CustomerConstants {
 	String CUSTOMER_NAME_VALID = "Customer name";
 	String CUSTOMER_OTHER_NAME_VALID = "Other Customer name";
 
-	default Customer getCustomer() {
-		return new CustomerImpl(CUSTOMER_NAME_VALID);
+	default CustomerImpl getCustomer() {
+		return new CustomerImpl(CUSTOMER_NAME_VALID, Collections.emptySet());
 	}
 
-	default Customer getCustomerOtherName() {
-		return new CustomerImpl(CUSTOMER_OTHER_NAME_VALID);
+	default CustomerImpl getCustomerOtherName() {
+		return new CustomerImpl(CUSTOMER_OTHER_NAME_VALID, Collections.emptySet());
 	}
 
 }

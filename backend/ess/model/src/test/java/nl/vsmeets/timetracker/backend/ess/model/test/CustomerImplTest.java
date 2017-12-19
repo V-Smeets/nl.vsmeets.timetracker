@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
@@ -25,7 +26,7 @@ class CustomerImplTest extends AbstractValidationTest implements CustomerConstan
 
 		@BeforeEach
 		public void createCustomer() {
-			customer = new CustomerImpl(CUSTOMER_NAME_VALID);
+			customer = new CustomerImpl(CUSTOMER_NAME_VALID, Collections.emptySet());
 			assertNotNull(customer);
 			validate(customer);
 		}
@@ -88,7 +89,7 @@ class CustomerImplTest extends AbstractValidationTest implements CustomerConstan
 
 	@Test
 	public void testCustomerImpl() {
-		customer = new CustomerImpl(CUSTOMER_NAME_VALID);
+		customer = new CustomerImpl(CUSTOMER_NAME_VALID, Collections.emptySet());
 		assertNotNull(customer);
 		validate(customer);
 	}
@@ -96,7 +97,7 @@ class CustomerImplTest extends AbstractValidationTest implements CustomerConstan
 	@Test
 	public void testCustomerImplNullName() {
 		assertThrows(ConstraintViolationException.class, () -> {
-			customer = new CustomerImpl(null);
+			customer = new CustomerImpl(null, Collections.emptySet());
 			validate(customer);
 		});
 	}

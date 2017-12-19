@@ -4,9 +4,9 @@
 package nl.vsmeets.timetracker.backend.ess.model.impl;
 
 import java.time.Duration;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-import nl.vsmeets.timetracker.backend.ess.model.Assignment;
-import nl.vsmeets.timetracker.backend.ess.model.Day;
 import nl.vsmeets.timetracker.backend.ess.model.Entry;
 
 /**
@@ -19,22 +19,22 @@ public class EntryImpl implements Entry {
 	/**
 	 * The assignment.
 	 */
-	private final Assignment assignment;
+	private final AssignmentImpl assignment;
 
 	/**
 	 * The day.
 	 */
-	private final Day day;
+	private final DayImpl day;
 
 	/**
 	 * The duration.
 	 */
-	private Duration duration = null;
+	private final Duration duration;
 
 	/**
 	 * The comment.
 	 */
-	private String comment = null;
+	private final String comment;
 
 	/**
 	 * Create a new entry.
@@ -44,18 +44,19 @@ public class EntryImpl implements Entry {
 	 * @param assignment
 	 *            The assignment.
 	 */
-	public EntryImpl(final Day day, final Assignment assignment) {
+	public EntryImpl(final DayImpl day, final AssignmentImpl assignment, final Duration duration,
+			final String comment) {
 		super();
-		this.day = day;
-		this.assignment = assignment;
-		if (this.day instanceof DayImpl) {
-			final DayImpl dayImpl = (DayImpl) this.day;
-			dayImpl.getEntries().add(this);
-		}
-		if (this.assignment instanceof AssignmentImpl) {
-			final AssignmentImpl assignmentImpl = (AssignmentImpl) this.assignment;
-			assignmentImpl.getEntries().add(this);
-		}
+		final Set<EntryImpl> assignmentEntities = new CopyOnWriteArraySet<>(assignment.getEntries());
+		assignmentEntities.add(this);
+		this.assignment = new AssignmentImpl(assignment.getUser(), assignment.getTask(), assignment.getStartDate(),
+				assignment.getEndDate(), assignmentEntities);
+		final Set<EntryImpl> dayEntities = new CopyOnWriteArraySet<>(day.getEntries());
+		dayEntities.add(this);
+		this.day = new DayImpl(day.getUser(), day.getDate(), day.getStartTime1(), day.getEndTime1(),
+				day.getStartTime2(), day.getEndTime2(), day.getTravelDuration(), dayEntities);
+		this.duration = duration;
+		this.comment = comment;
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class EntryImpl implements Entry {
 	}
 
 	@Override
-	public Assignment getAssignment() {
+	public AssignmentImpl getAssignment() {
 		return assignment;
 	}
 
@@ -98,7 +99,7 @@ public class EntryImpl implements Entry {
 	}
 
 	@Override
-	public Day getDay() {
+	public DayImpl getDay() {
 		return day;
 	}
 
@@ -117,18 +118,18 @@ public class EntryImpl implements Entry {
 	}
 
 	@Override
-	public void setComment(final String comment) {
-		this.comment = comment;
-	}
-
-	@Override
-	public void setDuration(final Duration duration) {
-		this.duration = duration;
-	}
-
-	@Override
 	public String toString() {
 		return String.format("EntryImpl [duration=%s, comment=%s]", duration, comment);
+	}
+
+	@Override
+	public EntryImpl withComment(final String comment) {
+		return new EntryImpl(day, assignment, duration, comment);
+	}
+
+	@Override
+	public EntryImpl withDuration(final Duration duration) {
+		return new EntryImpl(day, assignment, duration, comment);
 	}
 
 }

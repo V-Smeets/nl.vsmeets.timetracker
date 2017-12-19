@@ -3,10 +3,10 @@
  */
 package nl.vsmeets.timetracker.backend.ess.model.impl;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-import nl.vsmeets.timetracker.backend.ess.model.Customer;
 import nl.vsmeets.timetracker.backend.ess.model.Project;
 
 /**
@@ -19,7 +19,7 @@ public class ProjectImpl implements Project {
 	/**
 	 * The customer.
 	 */
-	private final Customer customer;
+	private final CustomerImpl customer;
 
 	/**
 	 * The name.
@@ -29,7 +29,7 @@ public class ProjectImpl implements Project {
 	/**
 	 * The PSP elements.
 	 */
-	private final Set<PspElementImpl> pspElements = new HashSet<>();
+	private final Set<PspElementImpl> pspElements;
 
 	/**
 	 * Create a new project.
@@ -39,14 +39,13 @@ public class ProjectImpl implements Project {
 	 * @param name
 	 *            The name.
 	 */
-	public ProjectImpl(final Customer customer, final String name) {
+	public ProjectImpl(final CustomerImpl customer, final String name, final Set<PspElementImpl> pspElements) {
 		super();
-		this.customer = customer;
+		final Set<ProjectImpl> customerProjects = new CopyOnWriteArraySet<>(customer.getProjects());
+		customerProjects.add(this);
+		this.customer = new CustomerImpl(customer.getName(), customerProjects);
 		this.name = name;
-		if (this.customer instanceof CustomerImpl) {
-			final CustomerImpl customerImpl = (CustomerImpl) this.customer;
-			customerImpl.getProjects().add(this);
-		}
+		this.pspElements = Collections.unmodifiableSet(new CopyOnWriteArraySet<>(pspElements));
 	}
 
 	@Override
@@ -79,7 +78,7 @@ public class ProjectImpl implements Project {
 	}
 
 	@Override
-	public Customer getCustomer() {
+	public CustomerImpl getCustomer() {
 		return customer;
 	}
 

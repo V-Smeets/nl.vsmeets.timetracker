@@ -3,10 +3,10 @@
  */
 package nl.vsmeets.timetracker.backend.ess.model.impl;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-import nl.vsmeets.timetracker.backend.ess.model.PspElement;
 import nl.vsmeets.timetracker.backend.ess.model.Task;
 
 /**
@@ -19,7 +19,7 @@ public class TaskImpl implements Task {
 	/**
 	 * The PSP element.
 	 */
-	private final PspElement pspElement;
+	private final PspElementImpl pspElement;
 
 	/**
 	 * The name.
@@ -34,7 +34,7 @@ public class TaskImpl implements Task {
 	/**
 	 * The assignments.
 	 */
-	private final Set<AssignmentImpl> assignments = new HashSet<>();
+	private final Set<AssignmentImpl> assignments;
 
 	/**
 	 * Create a new task.
@@ -46,15 +46,16 @@ public class TaskImpl implements Task {
 	 * @param description
 	 *            The description.
 	 */
-	public TaskImpl(final PspElement pspElement, final String name, final String description) {
+	public TaskImpl(final PspElementImpl pspElement, final String name, final String description,
+			final Set<AssignmentImpl> assignments) {
 		super();
-		this.pspElement = pspElement;
+		final Set<TaskImpl> pspElementTasks = new CopyOnWriteArraySet<>(pspElement.getTasks());
+		pspElementTasks.add(this);
+		this.pspElement = new PspElementImpl(pspElement.getProject(), pspElement.getName(), pspElement.getDescription(),
+				pspElementTasks);
 		this.name = name;
 		this.description = description;
-		if (this.pspElement instanceof PspElementImpl) {
-			final PspElementImpl pspElementImpl = (PspElementImpl) this.pspElement;
-			pspElementImpl.getTasks().add(this);
-		}
+		this.assignments = Collections.unmodifiableSet(new CopyOnWriteArraySet<>(assignments));
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public class TaskImpl implements Task {
 	}
 
 	@Override
-	public PspElement getPspElement() {
+	public PspElementImpl getPspElement() {
 		return pspElement;
 	}
 
